@@ -1,4 +1,3 @@
-clear all
 
 % Read in the sound data
 [d,r] = auread('test2.au');
