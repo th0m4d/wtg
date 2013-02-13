@@ -17,7 +17,7 @@ for i=1:10
         overlap = windowSize/2;
         %(x,window,noverlap,nfft,fs)
         [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
-        dat = vertcat(dat, P);
+        dat = horzcat(dat, P);
     end
     %write genre data to file
     filename = strcat('./data/genres/',folderName ,'_data');
