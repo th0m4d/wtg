@@ -1,9 +1,12 @@
-clear all
-
+function createSpectrogramsFromGTZAN()
 %Add library paths
 addpath ./lib/cqt_toolbox
-addpath ./data/
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
+
+savePath = './data/spectrograms/';
+if (exist(savePath, 'dir') == 0)
+    mkdir(savePath);
+end
 
 for i=1:10
     dat = [];
@@ -20,7 +23,7 @@ for i=1:10
         dat = horzcat(dat, P);
     end
     %write genre data to file
-    filename = strcat('./data/genres/',folderName ,'_data');
+    filename = strcat('./data/spectrograms/',folderName ,'_data');
     save(filename, 'dat');
     
 end
