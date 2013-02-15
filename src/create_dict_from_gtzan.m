@@ -1,4 +1,6 @@
-function createDictionariesFromGTZAN()
+function create_dict_from_gtzan()
+
+folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
 savePath = './data/dictionaries/';
 if (exist(savePath, 'dir') == 0)
@@ -11,5 +13,6 @@ spectrogram = spectrogram.dat;
 [ D, A ] = train_dictionary_ksvd(spectrogram);
 
  %write dictionary to file
- filename = strcat(savePath, folderName, '_data');
+ filename = strcat(savePath, char(folders(1)), '_data');
  save(filename, 'D');
+ save(filename, 'A','-append');
