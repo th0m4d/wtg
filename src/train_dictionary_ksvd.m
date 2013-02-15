@@ -1,4 +1,4 @@
-function [ D, A ] = train_dictionary_ksvd( spectograms )
+function [ D,A ] = train_dictionary_ksvd( spectograms,  cols_per_song, target_sparcity, num_iter  )
 %TRAIN_DICTIONARY Summary of this function goes here
 %   Train a dictioonary using K-SVD method
 
@@ -6,13 +6,13 @@ addpath ./lib/k-svd
 
 % number of column per song 
 % so size(spectograms,2) mod cols_per_song = 0
-cols_per_song = 1291;
+% cols_per_song = 1291;
 
 % number of iterations
-num_iter = 10;
+%num_iter = 80;
 
 % define target sparsity
-tg_sp = 3; % 15;
+%tg_sp = 3; % 15;
 
 % decompose image into overlapping patches
 % Y = im2col(I,[blk_sz blk_sz],'sliding');
@@ -42,7 +42,7 @@ Y = spectograms(:,1:cols_per_song);
 
 % D = rand(2*size(X,1),size(X,1));
 % D = bsxfun(@times,D,1./sqrt(sum(D.^2,1)));
-A_orig = OMP(D,Y,tg_sp);
+A_orig = OMP(D,Y,target_sparcity);
 
 for iter = 1:num_iter
 
@@ -81,6 +81,9 @@ for iter = 1:num_iter
         xRk = xTk*Omega_k;
         YRk = Y*Omega_k;
         ERk = Ek*Omega_k;
+        
+        error = norm(Erk,'fro');
+        print error
         
         [U,S,V] = svd(ERk);
         
