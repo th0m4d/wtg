@@ -1,4 +1,4 @@
-function createSpectrogramsFromGTZAN()
+function create_spec_from_gtzan()
 %Add library paths
 addpath ./lib/cqt_toolbox
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
