@@ -12,7 +12,7 @@ addpath ./lib/k-svd
 %num_iter = 80;
 
 % define target sparsity
-%tg_sp = 3; % 15;
+tg_sp = target_sparcity;
 
 % decompose image into overlapping patches
 % Y = im2col(I,[blk_sz blk_sz],'sliding');
