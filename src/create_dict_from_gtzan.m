@@ -10,7 +10,7 @@ end
 %%train blues dictionary
 spectrogram = load('data/spectrograms/blues_data.mat');
 spectrogram = spectrogram.dat;
-[ D, A ] = train_dictionary_ksvd(spectrogram);
+[ D, A ] = train_dictionary_ksvd(spectrogram, size(spectrogram,2), 3, 10);
 
  %write dictionary to file
  filename = strcat(savePath, char(folders(1)), '_data');
