@@ -82,9 +82,6 @@ for iter = 1:num_iter
         YRk = Y*Omega_k;
         ERk = Ek*Omega_k;
         
-        error = norm(Erk,'fro');
-        print error
-        
         [U,S,V] = svd(ERk);
         
         D(:,k) = U(:,1);
