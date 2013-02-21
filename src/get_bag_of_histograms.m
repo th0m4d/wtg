@@ -7,18 +7,30 @@
 % textureWindow = aggregation size in seconds
 function B = get_bag_of_histograms(A, bitrate, windowSize, textureWindow)
 
-% number of measurements in texture window = textureWindow (stftWindowSize / bitrate)
-cols_single = floor(textureWindow / (windowSize / bitrate));
+%transform the textureWindow from seconds to bits
+text_window_in_bits = textureWindow * bitrate;
 
+%check if the textureWindow divides without a remainder
+remainder = mod((textureWindow * bitrate), windowSize);
+
+%cut off the remainder
+if(remainder > 0) 
+    text_window_in_bits = text_window_in_bits - remainder;
+end
+
+% number of measurements in texture window = textureWindow (stftWindowSize / bitrate)
+cols_single = floor(text_window_in_bits/windowSize);
+
+%take into account the overlapping of 1/2
 cols = (cols_single * 2) - 1;
 
+%get the number of window shifts
 nx = size(A,2);
-
-ncol = fix(nx/cols);
+nshifts = fix(nx/cols);
 
 X = [];
 
-for i = 0:(ncol - 1)
+for i = 0:(nshifts - 1)
     startCols = (cols * i)+1;
     endCols = (cols*(i+1))+1;
     aCol = A(:,(startCols:endCols));
