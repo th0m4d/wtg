@@ -14,7 +14,7 @@ addpath(fastsvmpath);
 
 % model = svmtrain(histograms,labels);
 % default C-SVM model with C = 10
-svmmodel = svmtrain(labels,histograms,'-t 5 -b 1');
+svmmodel = svmtrain(histograms,labels,'-t 5 -b 1');
 
 end
 

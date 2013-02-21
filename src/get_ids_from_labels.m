@@ -6,4 +6,4 @@ function T = get_ids_from_labels(labels)
 
 s = size(labels,1);
 
-T = colon(1,s);
+T = double(colon(1,s));
