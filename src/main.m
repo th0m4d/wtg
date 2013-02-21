@@ -3,6 +3,11 @@ clear all
 %Add library paths
 addpath ./lib/cqt_toolbox
 addpath ./lib/k-svd
+addpath ./lib/fast-additive-svms
+addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1
+
+
+
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
 %% Short time audio representation
@@ -29,9 +34,9 @@ for i=1:size(folders,1)
     histogram = data.H;
     
     histograms = horzcat(histograms, histogram);
-    label = double(ones(1,size(histogram,2)) * i);
+    label = ones(1,size(histogram,2)) * i;
     labels = horzcat(labels, label);
 end
 
 
-[svmmodel] = boh_svm_train( histograms',labels');
+svmmodel = boh_svm_train( histograms',labels');

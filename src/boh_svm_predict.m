@@ -4,11 +4,9 @@ function [svml,svmap,svmd] = boh_svm_predict(model, histograms,labels )
 
 % First add to the path the modified version of libsvm with the
 % intersection kernel
-libsvmpath = 'lib/fast-additivie-svms/libsvm-mat-3.0-1';
-fastsvmpath = 'lib/fast-additivie-svms;'
+addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1/
+addpath  ./lib/fast-additive-svms/
 
-addpath(libsvmpath);
-addpath(fastsvmpath);
 
 [svml,svmap,svmd] = svmpredict(l,x,model,'-b 1');
 
