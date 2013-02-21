@@ -1,4 +1,5 @@
 *.m~
 .DS_Store
 genres/
+spectrograms/
 src/test.au
