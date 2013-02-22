@@ -38,5 +38,12 @@ for i=1:size(folders,1)
     labels = horzcat(labels, label);
 end
 
+%normalize the histogram matrix
+histograms = normalize_feature_matrix(histograms);
 
 svmmodel = boh_svm_train( histograms',labels');
+
+%% Make a prediction to test the model
+
+[svml,svmap,svmd] = boh_svm_predict(svmmodel, histograms',labels');
+

@@ -12,7 +12,7 @@ addpath  ./lib/fast-additive-svms/
 
 % model = svmtrain(histograms,labels);
 % default C-SVM model with C = 1 and 10-fold cross validation
-svmmodel = svmtrain(labels,histograms,'-t 5 -b 1 -v 10');
+svmmodel = svmtrain(labels,histograms,'-c 1 -t 5 -b 1');
 
 end
 
