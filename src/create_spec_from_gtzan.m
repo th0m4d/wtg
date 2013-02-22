@@ -3,6 +3,8 @@ function create_spec_from_gtzan()
 addpath ./lib/cqt_toolbox
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
+num_songs = 100; % number of songs to process per each genre
+
 savePath = './data/spectrograms/';
 if (exist(savePath, 'dir') == 0)
     mkdir(savePath);
@@ -11,7 +13,7 @@ end
 for i=1:10
     dat = [];
     folderName = char(folders(i));
-    for j=1:10
+    for j=1:num_songs
         path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',i), '.au');
         %% Read in the sound data
         [Y,Fs,BITS] = auread(path);
