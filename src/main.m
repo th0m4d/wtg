@@ -32,18 +32,13 @@ for i=1:size(folders,1)
     % Read in the histogram
     data = load(path);
     histogram = data.H;
-    
     histograms = horzcat(histograms, histogram);
     label = ones(1,size(histogram,2)) * i;
     labels = horzcat(labels, label);
 end
 
-%normalize the histogram matrix
-histograms = normalize_feature_matrix(histograms);
-
 svmmodel = boh_svm_train( histograms',labels');
 
 %% Make a prediction to test the model
-
 [svml,svmap,svmd] = boh_svm_predict(svmmodel, histograms',labels');
 

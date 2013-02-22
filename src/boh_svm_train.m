@@ -6,7 +6,7 @@ function  svmmodel  = boh_svm_train( histograms,labels )
 % intersection kernel
 % type of the interception kernel
 addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1/
-addpath  ./lib/fast-additive-svms/
+addpath ./lib/fast-additive-svms/
 
 
 
@@ -16,22 +16,28 @@ addpath  ./lib/fast-additive-svms/
 
 C = 1;
 acc = 0;
+%start x value for the exponential c parameter
+j = -15;
+%end x value for the exponential c parameter
+k = 10;
+%range for the exponential c value
+x = j:k;
+cval = exp(x);
 
+sprintf('Training model using 10-fold cross validation from C= %d to %d...',j,k);
 
-printf('Training model using 10-fold cross validation from C= 1 to 20...');
-for i = 1:1:20,
-    newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %i ',i));
+for i = 1:1:size(cval,2)
+    newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i)));
     if newacc > acc
         acc = newacc;
-        C = 1;
+        C = cval(i);
     end
 end
-printf('done\n');
 
-printf('Best parameter C=%i with an accuract of %f\n',C,i);
-printf('Retraining...');
-    svnmodel =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -c %i ',C));
-printf('DONE\n');
+fprintf('Best parameter C=%i with an accuract of %f\n',C,acc);
+fprintf('Retraining...');
+    svmmodel = svmtrain(labels,histograms,sprintf('-t 5 -b 1 -c %i ',C));
+fprintf('DONE\n');
 
 end
 
