@@ -8,7 +8,7 @@ addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1/
 addpath  ./lib/fast-additive-svms/
 
 
-[svml,svmap,svmd] = svmpredict(l,x,model,'-b 1');
+[svml,svmap,svmd] = svmpredict(labels, histograms, model, '-b 1');
 
 end
 
