@@ -27,6 +27,7 @@ cval = exp(x);
 sprintf('Training model using 10-fold cross validation from C= %d to %d...',j,k);
 
 for i = 1:1:size(cval,2)
+    fprintf('Training with %0.5f   -  ',C);
     newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i)));
     if newacc > acc
         acc = newacc;
@@ -36,7 +37,7 @@ end
 
 fprintf('Best parameter C=%i with an accuract of %f\n',C,acc);
 fprintf('Retraining...');
-    svmmodel = svmtrain(labels,histograms,sprintf('-t 5 -b 1 -c %i ',C));
+    svmmodel = svmtrain(labels,histograms,sprintf('-t 5 -b 1 -c %i ', C));
 fprintf('DONE\n');
 
 end
