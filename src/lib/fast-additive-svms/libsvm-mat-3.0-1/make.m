@@ -1,10 +1,21 @@
-% This make.m is used under Windows
+% This make.m is for MATLAB and OCTAVE under Windows, Mac, and Unix
 
-%add -largeArrayDims on 64-bit machines
-
-mex -O -c svm.cpp
-mex -O -c svm_model_matlab.c
-mex -O svmtrain.c svm.obj svm_model_matlab.obj
-mex -O svmpredict.c svm.obj svm_model_matlab.obj
-mex -O libsvmread.c
-mex -O libsvmwrite.c
+try
+	Type = ver;
+	% This part is for OCTAVE
+	if(strcmp(Type(1).Name, 'Octave') == 1)
+		mex libsvmread.c
+		mex libsvmwrite.c
+		mex svmtrain.c svm.cpp svm_model_matlab.c
+		mex svmpredict.c svm.cpp svm_model_matlab.c
+	% This part is for MATLAB
+	% Add -largeArrayDims on 64-bit machines of MATLAB
+	else
+		mex CFLAGS="\$CFLAGS -std=c99" -largeArrayDims libsvmread.c
+		mex CFLAGS="\$CFLAGS -std=c99" -largeArrayDims libsvmwrite.c
+		mex CFLAGS="\$CFLAGS -std=c99" -largeArrayDims svmtrain.c svm.cpp svm_model_matlab.c
+		mex CFLAGS="\$CFLAGS -std=c99" -largeArrayDims svmpredict.c svm.cpp svm_model_matlab.c
+	end
+catch
+	fprintf('If make.m fails, please check README about detailed instructions.\n');
+end

@@ -1,6 +1,6 @@
 # This Makefile is used under Linux
 
-MATLABDIR ?= /Applications/MATLAB_R2009b.app
+MATLABDIR ?= /Applications/MATLAB_R2012b.app/
 # for Mac
 # MATLABDIR ?= /opt/local/matlab
 
