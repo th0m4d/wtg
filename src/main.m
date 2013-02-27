@@ -5,8 +5,9 @@ addpath ./lib/cqt_toolbox
 addpath ./lib/k-svd
 addpath ./lib/fast-additive-svms
 addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1
-
-
+% K-SVD implementation from Ron Rubinstein
+addpath ./lib/ompbox10/
+addpath ./lib/ksvdbox13/
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 

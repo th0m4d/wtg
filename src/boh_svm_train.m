@@ -19,25 +19,26 @@ acc = 0;
 %start x value for the exponential c parameter
 j = -15;
 %end x value for the exponential c parameter
-k = 10;
+k = 20;
 %range for the exponential c value
-x = j:k;
-cval = exp(x);
+%x = 
+cval = power(2,-5:0.7:2); % power(2,-5:1:15); % exp(x);
 
-sprintf('Training model using 10-fold cross validation from C= %d to %d...',j,k);
+sprintf('Training model using 10-fold cross validation from C= %d to %d...',cval(1),cval(9));
 
-for i = 1:1:size(cval,2)
-    fprintf('Training with %0.5f   -  ',C);
-    newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i)));
-    if newacc > acc
-        acc = newacc;
-        C = cval(i);
-    end
-end
+ for i = 1:1:5
+     fprintf('Training with %0.5f   -  ',cval(i));
+     newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i)));
+     if ( newacc > acc && newacc < 99) 
+         acc = newacc;
+         C = cval(i);
+     end
+ end
+%C = 0.12500;
 
 fprintf('Best parameter C=%i with an accuract of %f\n',C,acc);
 fprintf('Retraining...');
-    svmmodel = svmtrain(labels,histograms,sprintf('-t 5 -b 1 -c %i ', C));
+    svmmodel = svmtrain(labels,histograms,sprintf('-t 5 -b 1 -c %0.5f ', C));
 fprintf('DONE\n');
 
 end

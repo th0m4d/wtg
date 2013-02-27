@@ -17,7 +17,7 @@ for i=1:10
     disp(strcat('Training dictionary for genre: ', folderName));
     % there was an error here when dividing by then. A inner loop is
     % missing.
-    [ D, A ] = train_dictionary_ksvd(spectrogram, size(spectrogram,2)/10, 3, 10);
+    [ D, A ] = train_dictionary_ksvdbox(500,spectrogram, size(spectrogram,2)/100, 1, 10);
 
     %write dictionary to file
     filename = strcat(savePath, char(folders(i)), '_data.mat');
