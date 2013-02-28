@@ -1,5 +1,8 @@
 function gamma = encode_features_using_dictionaries(sparcity)
 
+addpath ./lib/ompbox10/
+
+
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
 savePath = './data/sparserep/';
@@ -28,6 +31,10 @@ for i=1:10
 end
 
 fprintf('Enconding samples using a dictionary  of %d columns \n',size(joint_D,2));
+JD_norm = normc(joint_D);
+G = JD_norm'*JD_norm;
+
+
 for i=1:10
     folderName = char(folders(i));
     path = strcat('data/spectrograms/',folderName,'_data.mat');
@@ -36,9 +43,8 @@ for i=1:10
     spectogram = spectogram.dat;
 
     disp(strcat('Encoding genre:', folderName));
-    
     % We enconde using OMP per genre
-    gamma = omp(spectogram,joint_D, sparcity);
+    gamma = omp(JD_norm,spectogram,G, sparcity);
     
     %write dictionary to file
     filename = strcat(savePath, char(folders(i)), '_data.mat');
