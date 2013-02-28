@@ -9,10 +9,10 @@ end
   
 for i=1:10
     folderName = char(folders(i));
-    path = strcat('data/dictionaries/',folderName,'_data.mat');
+    path = strcat('data/sparserep/',folderName,'_data.mat');
     % Read in the dictionaries
     data = load(path);
-    encoding = data.A;
+    encoding = data.gamma;
 
     H = get_bag_of_histograms(encoding, 22050, 1024, 5);
     

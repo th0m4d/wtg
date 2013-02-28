@@ -19,9 +19,14 @@ folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 
 %% Codebook generation and encoding
 
 %create_dict_from_gtzan();
-%read_dictionaries_from_filesystem();
+
+% TODO Refactor and move to the right using and specified 
+encode_features_using_dictionaries(1);
+
 
 %% Code word encoding aggregation
+create_histograms_from_gtzan();
+
 
 %% SVM training
 histograms = [];
