@@ -28,7 +28,7 @@ for i=1:size(folders,1)
     num_of_test = floor(number_of_songs * percent_for_testing/100);
    
     %create random indices
-    randoms = randi(number_of_songs,[1,num_of_test]);
+    randoms = randperm(number_of_songs,num_of_test);
     randoms = (randoms-1)*6+1;
     
     indices = [];
