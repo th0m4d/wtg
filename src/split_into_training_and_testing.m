@@ -5,7 +5,7 @@
 %genre.
 %
 % k_fold = the percentage of the testset measurements
-function [TR,TE,LTR,LTE] = split_into_training_and_testing(k_fold)
+function [TR,TE,LTR,LTE] = split_into_training_and_testing(percent_for_testing)
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
@@ -25,7 +25,7 @@ for i=1:size(folders,1)
     number_of_songs = floor(size(histogram,2) / 6);
     
     %number of songs for the testing subset
-    num_of_test = floor(number_of_songs * k_fold/100);
+    num_of_test = floor(number_of_songs * percent_for_testing/100);
    
     %create random indices
     randoms = randi(number_of_songs,[1,num_of_test]);
@@ -36,12 +36,18 @@ for i=1:size(folders,1)
         indices = horzcat(indices,(randoms(j):randoms(j)+5));
     end
     
-    %compile training songs
+    %compile testing songs
     testing = histogram(:,indices);
     
-    %compile testing songs
+    %compile training songs
     training = histogram;
-    training(:,randoms) = [];
+    
+    %split_matrix =  ones(1,size(histogram,2));
+    %split_matrix(:,indices) = 0;
+    %plot(split_matrix);
+    
+    
+    training(:,indices) = [];
     
     histograms_training = horzcat(histograms_training, training);
     histograms_testing = horzcat(histograms_testing, testing);
