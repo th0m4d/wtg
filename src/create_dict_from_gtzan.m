@@ -1,4 +1,4 @@
-function create_dict_from_gtzan()
+function create_dict_from_gtzan(genre_dict_size)
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
@@ -17,7 +17,7 @@ for i=1:10
     disp(strcat('Training dictionary for genre: ', folderName));
     % there was an error here when dividing by then. A inner loop is
     % missing.
-    [ D, A ] = train_dictionary_ksvdbox(500,spectrogram, size(spectrogram,2)/100, 1, 10);
+    [ D, A ] = train_dictionary_ksvdbox(genre_dict_size,spectrogram, size(spectrogram,2)/100, 1, 10);
 
     %write dictionary to file
     filename = strcat(savePath, char(folders(i)), '_data.mat');

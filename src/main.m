@@ -18,10 +18,11 @@ folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 
 
 %% Codebook generation and encoding
 
-%create_dict_from_gtzan();
+%%create_dict_from_gtzan(50);
 
 % TODO Refactor and move to the right using and specified 
-encode_features_using_dictionaries(1);
+target_sparcity = 1;
+encode_features_using_dictionaries(target_sparcity);
 
 
 %% Code word encoding aggregation

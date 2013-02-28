@@ -22,9 +22,10 @@ j = -15;
 k = 20;
 %range for the exponential c value
 %x = 
-cval = power(2,-5:0.5:0.7); % power(2,-5:1:15); % exp(x);
+cval = power(2,-5:0.5:1); % power(2,-5:1:15); % exp(x);
 
 fprintf('Training model using 10-fold cross validation from C= %d to %d...\n',cval(1),cval(size(cval,2)));
+fprintf('Training with %d training samples \n',size(labels,1));
 
 for i = 5:size(cval,2)
       fprintf('Training with %0.5f \n',cval(i));
