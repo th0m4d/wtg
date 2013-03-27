@@ -25,7 +25,7 @@ for i=1:size(folders,1)
     data = load(path);
     %histogram = data.H;
     
-    training = data.H;
+    training = data.H_tr;
     histograms_training = horzcat(histograms_training, training);
     label_training = ones(1,size(training,2)) * i;
     
@@ -40,7 +40,7 @@ for i=1:size(folders,1)
     data = load(path);
     %histogram = data.H;
     
-    testing = data.H;
+    testing = data.H_te;
     histograms_testing = horzcat(histograms_testing, testing);
     label_testing = ones(1,size(testing,2)) * i;
     

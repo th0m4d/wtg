@@ -24,7 +24,7 @@ k = 20;
 %x = 
 cval = power(2,-5:0.5:1); % power(2,-5:1:15); % exp(x);
 
-fprintf('Training model using 10-fold cross validation from C= %d to %d...\n',cval(1),cval(size(cval,2)));
+fprintf('Training model using 10-fold cross validation from C= %d to %d...\n',cval(5),cval(size(cval,2)));
 fprintf('Training with %d training samples \n',size(labels,1));
 
 for i = 5:size(cval,2)
@@ -35,13 +35,14 @@ for i = 5:size(cval,2)
           C = cval(i);
       end
       
-      if(acc >= 99)
+     if(acc >= 99)
           break;
       end
-  end
-%C = 0.12500;
+end
 
-fprintf('Best parameter C=%i with an accuract of %f\n',C,acc);
+C = cval(i);
+
+fprintf('Best parameter C=%i with an accuracy of %f\n',C,acc);
 fprintf('Retraining...');
     svmmodel = svmtrain(labels,histograms,sprintf('-t 5 -b 1 -c %0.5f ', C));
 fprintf('DONE\n');

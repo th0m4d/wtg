@@ -41,7 +41,7 @@ params.dictsize = dictsize;
 params.iternum = num_iter;
 params.memusage = 'high';
 params.initdict = D;
-[D,A,err] = ksvd(params,'');
+[D,A,err] = ksvd(params,'irt');
 
 
 

@@ -13,11 +13,11 @@ for i=1:10
     data = load(path);
     encoding = data.gamma;
 
-    H = get_bag_of_histograms(encoding, 22050, 1024, 5);
+    H_tr = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
     %write dictionary to file
     filename = strcat(savePath,'training/', char(folders(i)), '_data.mat');
-    save(filename, 'H');
+    save(filename, 'H_tr');
             
 end
 
@@ -28,10 +28,10 @@ for i=1:10
     data = load(path);
     encoding = data.gamma;
 
-    H = get_bag_of_histograms(encoding, 22050, 1024, 5);
+    H_te = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
     %write dictionary to file
     filename = strcat(savePath,'testing/', char(folders(i)), '_data.mat');
-    save(filename, 'H');
+    save(filename, 'H_te');
             
 end

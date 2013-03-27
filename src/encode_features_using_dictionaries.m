@@ -5,23 +5,12 @@ addpath ./lib/ompbox10/
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
-
-%TODO create a function to do this
 savePathRoot = './data/sparserep/';
 savePathTraining = './data/sparserep/training/';
-savePathTesting = './data/sparserep/testing/'
+savePathTesting = './data/sparserep/testing/';
 
-if (exist(savePathRoot, 'dir') == 0)
-    mkdir(savePathRoot);
-end
+util_create_directory_structure(savePathRoot);
 
-if (exist(savePathTraining, 'dir') == 0)
-    mkdir(savePathTraining);
-end
-
-if (exist(savePathTesting, 'dir') == 0)
-    mkdir(savePathTesting);
-end
 
 joint_D = [];
 

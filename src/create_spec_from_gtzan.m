@@ -15,8 +15,8 @@ num_songs = 100; % number of songs to process per each genre
 
 
 savePathroot = './data/spectrograms/';
-savePathTraining = './data/spectrograms/training';
-savePathTesting = './data/spectrograms/testing';
+savePathTraining = './data/spectrograms/training/';
+savePathTesting = './data/spectrograms/testing/';
 
 util_create_directory_structure(savePathroot);
 
@@ -56,7 +56,7 @@ for i=1:10
         overlap = windowSize/2;
         %(x,window,noverlap,nfft,fs)
         [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
-        dat_testing = horzcat(dat_testing, P);
+        dat_testing = horzcat(dat_testing, log(P));
     end
     
     
