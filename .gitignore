@@ -7,4 +7,5 @@ src/data/histograms/
 src/data/dictionaries/
 src/data/genres/        
 src/data/sparserep/    
-src/data/spectrograms/ 
+src/data/spectrograms/
+*.o 
