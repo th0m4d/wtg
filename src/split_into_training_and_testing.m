@@ -5,7 +5,7 @@
 %genre.
 %
 % k_fold = the percentage of the testset measurements
-function [TR,TE,LTR,LTE] = split_into_training_and_testing(percent_for_testing)
+function [TR,TE,LTR,LTE] = split_into_training_and_testing()
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
@@ -14,50 +14,40 @@ histograms_testing = [];
 labels_training = [];
 labels_testing = [];
 
+% Now this function is easier because the data is already splitted into two
+% different directories
+
+
 for i=1:size(folders,1)
     folderName = char(folders(i));
-    path = strcat('data/histograms/',folderName,'_data.mat');
+    path = strcat('data/histograms/training/',folderName,'_data.mat');
     % Read in the histogram
     data = load(path);
-    histogram = data.H;
+    %histogram = data.H;
     
-    %number of songs in the histogram matrix
-    number_of_songs = floor(size(histogram,2) / 6);
-    
-    %number of songs for the testing subset
-    num_of_test = floor(number_of_songs * percent_for_testing/100);
-   
-    %create random indices
-    randoms = randperm(number_of_songs,num_of_test);
-    randoms = (randoms-1)*6+1;
-    
-    indices = [];
-    for j=1:(size(randoms,2))
-        indices = horzcat(indices,(randoms(j):randoms(j)+5));
-    end
-    
-    %compile testing songs
-    testing = histogram(:,indices);
-    
-    %compile training songs
-    training = histogram;
-    
-    %split_matrix =  ones(1,size(histogram,2));
-    %split_matrix(:,indices) = 0;
-    %plot(split_matrix);
-    
-    
-    training(:,indices) = [];
-    
+    training = data.H;
     histograms_training = horzcat(histograms_training, training);
-    histograms_testing = horzcat(histograms_testing, testing);
-    
     label_training = ones(1,size(training,2)) * i;
-    labels_training = horzcat(labels_training, label_training);
     
+    
+    labels_training = horzcat(labels_training, label_training);
+end
+
+for i=1:size(folders,1)
+    folderName = char(folders(i));
+    path = strcat('data/histograms/testing/',folderName,'_data.mat');
+    % Read in the histogram
+    data = load(path);
+    %histogram = data.H;
+    
+    testing = data.H;
+    histograms_testing = horzcat(histograms_testing, testing);
     label_testing = ones(1,size(testing,2)) * i;
+    
+    
     labels_testing = horzcat(labels_testing, label_testing);
 end
+
 
 TR = histograms_training;
 TE = histograms_testing;

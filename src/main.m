@@ -13,12 +13,12 @@ folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 
 
 %% Short time audio representation
 
-%create_spec_from_gtzan();
-%read_spectrograms_from_filesystem();
+create_spec_from_gtzan(90);
+
 
 %% Codebook generation and encoding
 
-%%create_dict_from_gtzan(50);
+create_dict_from_gtzan(50);
 
 % TODO Refactor and move to the right using and specified 
 target_sparcity = 1;
@@ -33,9 +33,10 @@ create_histograms_from_gtzan();
 histograms = [];
 labels = [];
 
-testing_percentage = 90;
+%testing_percentage = 90;
 
-[TR,TE,LTR,LTE] = split_into_training_and_testing(testing_percentage);
+
+[TR,TE,LTR,LTE] = split_into_training_and_testing();
 
 
 % 

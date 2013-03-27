@@ -9,10 +9,10 @@ end
   
 for i=1:10
     folderName = char(folders(i));
-    path = strcat('data/spectrograms/',folderName,'_data.mat');
+    path = strcat('data/spectrograms/training/',folderName,'_data.mat');
     % Read in the spectrogram
     spectrogram = load(path);
-    spectrogram = spectrogram.dat;
+    spectrogram = spectrogram.dat_training;
 
     disp(strcat('Training dictionary for genre: ', folderName));
     % there was an error here when dividing by then. A inner loop is
