@@ -15,6 +15,10 @@ for i=1:10
     spectrogram = spectrogram.dat_training;
 
     disp(strcat('Training dictionary for genre: ', folderName));
+    disp(strcat('Processing file: ', path));
+
+    
+    
     % there was an error here when dividing by then. A inner loop is
     % missing.
     [ D, A ] = train_dictionary_ksvdbox(genre_dict_size,spectrogram, size(spectrogram,2)/100, 1, 10);

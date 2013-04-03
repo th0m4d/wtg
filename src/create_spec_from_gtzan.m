@@ -31,13 +31,14 @@ for i=1:10
     folderName = char(folders(i));
     
     % get the testing and and training indexings
-    training_idxs = randperm(num_songs,training_percentage);
-    testing_idxs = setdiff(1:num_songs,training_idxs);
+    training_idxs = randperm(num_songs-1,training_percentage);
+    testing_idxs = setdiff(1:num_songs-1,training_idxs);
     
-    
+    fprintf('Creating Spectrograms of genre %s for training set\n',folderName);
     for j=training_idxs
-        path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',i), '.au');
+        path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');        
         %% Read in the sound data
+        fprintf('Processing file %s \n',path);
         [Y,Fs,BITS] = auread(path);
         %%Compute spectrum
         windowSize = 1024;
@@ -47,8 +48,10 @@ for i=1:10
         dat_training = horzcat(dat_training, P);
     end
     
+    fprintf('Creating Spectrograms of genre %s for testing set\n',folderName);
     for j=testing_idxs
-        path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',i), '.au');
+        path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');
+        fprintf('Processing file %s \n',path);
         %% Read in the sound data
         [Y,Fs,BITS] = auread(path);
         %%Compute spectrum
