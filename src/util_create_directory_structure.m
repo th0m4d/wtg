@@ -1,4 +1,4 @@
-function util_create_directory_structure( rootdir )
+function [rootdir,training,testing] = util_create_directory_structure( rootdir )
 %UTIL_CREATE_DIRECTORY_STRUCTURE If the directory does not exists it
 %create it and testing and training subdirs
 
