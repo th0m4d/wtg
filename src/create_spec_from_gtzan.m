@@ -45,7 +45,7 @@ for i=1:10
         overlap = windowSize/2;
         %(x,window,noverlap,nfft,fs)
         [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
-        dat_training = horzcat(dat_training, P);
+        dat_training = horzcat(dat_training, log(P));
     end
     
     fprintf('Creating Spectrograms of genre %s for testing set\n',folderName);
