@@ -5,12 +5,7 @@ addpath ./lib/ompbox10/
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
-savePathRoot = './data/sparserep/';
-savePathTraining = './data/sparserep/training/';
-savePathTesting = './data/sparserep/testing/';
-
-util_create_directory_structure(savePathRoot);
-
+[savePathRoot,savePathTraining,savePathTesting] =  util_create_directory_structure('./data/sparserep/');
 
 joint_D = [];
 
@@ -50,12 +45,14 @@ for i=1:10
     
     %write representation to file
     filename = strcat(savePathTraining, char(folders(i)), '_data.mat');
+    fprintf('Saving %s\n',filename);
     save(filename, 'gamma');
 
             
 end
 
 %Encodeing testing
+%Remember that the dictionary has not been training using this files
 for i=1:10
     folderName = char(folders(i));
     path = strcat('data/spectrograms/testing/',folderName,'_data.mat');
@@ -69,6 +66,7 @@ for i=1:10
     
     %write representation to file
     filename = strcat(savePathTesting, char(folders(i)), '_data.mat');
+    fprintf('Saving %',filename);
     save(filename, 'gamma');
 
             

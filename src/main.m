@@ -33,8 +33,6 @@ create_histograms_from_gtzan();
 histograms = [];
 labels = [];
 
-%testing_percentage = 90;
-
 
 [TR,TE,LTR,LTE] = split_into_training_and_testing();
 
@@ -51,7 +49,13 @@ labels = [];
 %     labels = horzcat(labels, label);
 % end
 
-svmmodel = boh_svm_train(TR' ,LTR');
+% call like this to perform cross validation
+xvalidation_range = power(1.5,5:0.7:12);
+svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range);
+
+%call like this to train with an specific value
+%C = 55;
+%svmmodel = boh_svm_train(TR' ,LTR',0,C);
 
 %Make a prediction to test the model
 [svml,svmap,svmd] = boh_svm_predict(svmmodel, TE',LTE');
