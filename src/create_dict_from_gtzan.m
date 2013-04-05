@@ -1,4 +1,11 @@
 function create_dict_from_gtzan(genre_dict_size)
+% This function create the dictionaries from the spectogram of gtzans
+% genre_dict_size is the size of the dictionary for each genre.
+% the dictionaries are written in data/dictionaries
+
+% K-SVD implementation from Ron Rubinstein
+addpath ./lib/ompbox10/
+addpath ./lib/ksvdbox13/
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 

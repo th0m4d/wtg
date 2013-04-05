@@ -31,8 +31,8 @@ for i=1:10
     folderName = char(folders(i));
     
     % get the testing and and training indexings
-    training_idxs = randperm(num_songs-1,training_percentage);
-    testing_idxs = setdiff(1:num_songs-1,training_idxs);
+    training_idxs = randperm(num_songs,training_percentage)-1;
+    testing_idxs = setdiff(0:num_songs-1,training_idxs);
     
     fprintf('Creating Spectrograms of genre %s for training set\n',folderName);
     for j=training_idxs
@@ -45,7 +45,7 @@ for i=1:10
         overlap = windowSize/2;
         %(x,window,noverlap,nfft,fs)
         [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
-        dat_training = horzcat(dat_training, P);
+        dat_training = horzcat(dat_training, log(P));
     end
     
     fprintf('Creating Spectrograms of genre %s for testing set\n',folderName);
@@ -59,7 +59,7 @@ for i=1:10
         overlap = windowSize/2;
         %(x,window,noverlap,nfft,fs)
         [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
-        dat_testing = horzcat(dat_testing, P);
+        dat_testing = horzcat(dat_testing, log(P));
     end
     
     
