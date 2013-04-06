@@ -12,7 +12,7 @@ function [ spec ] = get_spec_from_audio( file_path )
     %(x,window,noverlap,nfft,fs)
     [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
     P_norm = normc(P);
-    spec = log(P_norm);
+    spec = P_norm;
 
 end
 
