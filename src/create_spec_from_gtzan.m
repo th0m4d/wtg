@@ -62,7 +62,9 @@ for i=1:10
         dat_testing = horzcat(dat_testing, log(P));
     end
     
-    
+    %normalize columns to l2-norm = 1
+    dat_training = normc(dat_training);
+    dat_testing = normc(dat_testing);
     
     %write genre data to file
     filename_tr = strcat(savePathTraining,folderName ,'_data');
