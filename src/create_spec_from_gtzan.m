@@ -38,16 +38,17 @@ for i=1:10
     for j=training_idxs
         path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');        
         P = get_spec_from_audio(path);
-        dat_training = horzcat(dat_training, log(P));
+        dat_training = horzcat(dat_training, P);
     end
     
     fprintf('Creating Spectrograms of genre %s for testing set\n',folderName);
     for j=testing_idxs
         path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');
         P = get_spec_from_audio(path);
-        dat_testing = horzcat(dat_testing, log(P));
+        dat_testing = horzcat(dat_testing, P);
     end
     
+    fprintf('saving spectrogram to file...');
     %write genre data to file
     filename_tr = strcat(savePathTraining,folderName ,'_data');
     filename_te = strcat(savePathTesting,folderName ,'_data');

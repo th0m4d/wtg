@@ -44,7 +44,7 @@ for i=1:10
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
-    gamma = omp(JD_norm,spectogram,G, sparcity);
+    gamma = omp(joint_D,spectogram,G, sparcity);
     
     %write representation to file
     filename = strcat(savePathTraining, char(folders(i)), '_data.mat');
@@ -65,7 +65,7 @@ for i=1:10
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
-    gamma = omp(JD_norm,spectogram,G, sparcity);
+    gamma = omp(joint_D,spectogram,G, sparcity);
     
     %write representation to file
     filename = strcat(savePathTesting, char(folders(i)), '_data.mat');
