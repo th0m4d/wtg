@@ -37,34 +37,16 @@ for i=1:10
     fprintf('Creating Spectrograms of genre %s for training set\n',folderName);
     for j=training_idxs
         path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');        
-        %% Read in the sound data
-        fprintf('Processing file %s \n',path);
-        [Y,Fs,BITS] = auread(path);
-        %%Compute spectrum
-        windowSize = 1024;
-        overlap = windowSize/2;
-        %(x,window,noverlap,nfft,fs)
-        [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
+        P = get_spec_from_audio(path);
         dat_training = horzcat(dat_training, log(P));
     end
     
     fprintf('Creating Spectrograms of genre %s for testing set\n',folderName);
     for j=testing_idxs
         path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');
-        fprintf('Processing file %s \n',path);
-        %% Read in the sound data
-        [Y,Fs,BITS] = auread(path);
-        %%Compute spectrum
-        windowSize = 1024;
-        overlap = windowSize/2;
-        %(x,window,noverlap,nfft,fs)
-        [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
+        P = get_spec_from_audio(path);
         dat_testing = horzcat(dat_testing, log(P));
     end
-    
-    %normalize columns to l2-norm = 1
-    dat_training = normc(dat_training);
-    dat_testing = normc(dat_testing);
     
     %write genre data to file
     filename_tr = strcat(savePathTraining,folderName ,'_data');

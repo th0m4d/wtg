@@ -28,8 +28,11 @@ for i=1:10
 end
 
 fprintf('Enconding samples using a dictionary  of %d columns \n',size(joint_D,2));
-JD_norm = normc(joint_D);
-G = JD_norm'*JD_norm;
+
+%JD_norm = normc(joint_D);
+%G = JD_norm'*JD_norm;
+
+G = joint_D' * joint_D;
 
 %Encode training (Necessary? - For the SVM I would say XD)
 for i=1:10
