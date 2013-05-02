@@ -9,7 +9,9 @@ addpath lib/fast-additive-svms/libsvm-mat-3.0-1
 addpath lib/ompbox10
 addpath lib/ksvdbox13
 
-folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
+%list of folders to be included into training
+%folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
+folders = {'blues';'classical'};
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
@@ -20,23 +22,24 @@ util_delete_data();
 %% Short time audio representation
 fprintf('\n_________________________________________\n');
 fprintf('== Short time audio feature generation ==\n');
-create_spec_from_gtzan(90);
+create_spec_from_gtzan(90, folders);
 
 
 %% Codebook generation and encoding
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
-create_dict_from_gtzan(50);
+num_iterations = 10;
+create_dict_from_gtzan(50, num_iterations, folders);
 
 % TODO Refactor and move to the right using and specified 
 target_sparcity = 1;
-encode_features_using_dictionaries(target_sparcity);
+encode_features_using_dictionaries(target_sparcity, folders);
 
 
 %% Code word encoding aggregation
 fprintf('\n_________________________________________\n');
 fprintf('== Bag of histograms creation ==\n');
-create_histograms_from_gtzan();
+create_histograms_from_gtzan(folders);
 
 
 %% SVM training
@@ -48,7 +51,7 @@ histograms = [];
 labels = [];
 
 
-[TR,TE,LTR,LTE] = split_into_training_and_testing();
+[TR,TE,LTR,LTE] = split_into_training_and_testing(folders);
 
 
 % 

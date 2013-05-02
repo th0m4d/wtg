@@ -1,12 +1,11 @@
-function create_histograms_from_gtzan()
-
-folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
+function create_histograms_from_gtzan(folders)
 
 savePath = './data/histograms/';
 util_create_directory_structure(savePath);
 
+num_genres = size(folders,1);
   
-for i=1:10
+for i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/sparserep/training/',folderName,'_data.mat');
     % Read in the dictionaries
@@ -21,7 +20,7 @@ for i=1:10
             
 end
 
-for i=1:10
+for i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/sparserep/testing/',folderName,'_data.mat');
     % Read in the dictionaries

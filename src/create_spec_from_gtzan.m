@@ -1,4 +1,4 @@
-function create_spec_from_gtzan(training_percentage)
+function create_spec_from_gtzan(training_percentage, folders)
 % This function create the spectograms for the songs in the dataset
 % at the same time it splits those spectograms into training and testing
 % (storing in in different subdirectories) the amount of songs used for
@@ -7,7 +7,6 @@ function create_spec_from_gtzan(training_percentage)
 
 %Add library paths
 addpath ./lib/cqt_toolbox
-folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
 num_songs = 100; % number of songs to process per each genre
 
@@ -24,8 +23,9 @@ util_create_directory_structure(savePathroot);
 training_idxs = [];
 testing_idxs = [];
 
+num_genres = size(folders,1);
 
-for i=1:10
+for i=1:num_genres;
     dat_training = [];
     dat_testing = [];
     folderName = char(folders(i));

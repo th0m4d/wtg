@@ -1,16 +1,15 @@
-function gamma = encode_features_using_dictionaries(sparcity)
+function gamma = encode_features_using_dictionaries(sparcity, folders)
 
 addpath ./lib/ompbox10/
-
-
-folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
 [savePathRoot,savePathTraining,savePathTesting] =  util_create_directory_structure('./data/sparserep/');
 
 joint_D = [];
 
+num_genres = size(folders,1);
+
 % we join the dictionaries
-for i=1:10
+for i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/dictionaries/',folderName,'_data.mat');
     % Read in the dictionaries
@@ -35,7 +34,7 @@ fprintf('Enconding samples using a dictionary  of %d columns \n',size(joint_D,2)
 G = joint_D' * joint_D;
 
 %Encode training (Necessary? - For the SVM I would say XD)
-for i=1:10
+for i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/spectrograms/training/',folderName,'_data.mat');
     % Read in the spectrogram
@@ -56,7 +55,7 @@ end
 
 %Encodeing testing
 %Remember that the dictionary has not been training using this files
-for i=1:10
+for i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/spectrograms/testing/',folderName,'_data.mat');
     % Read in the spectrogram

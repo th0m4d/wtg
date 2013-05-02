@@ -5,9 +5,7 @@
 %genre.
 %
 % k_fold = the percentage of the testset measurements
-function [TR,TE,LTR,LTE] = split_into_training_and_testing()
-
-folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
+function [TR,TE,LTR,LTE] = split_into_training_and_testing(folders)
 
 histograms_training = [];
 histograms_testing = [];
@@ -17,8 +15,9 @@ labels_testing = [];
 % Now this function is easier because the data is already splitted into two
 % different directories
 
+num_genres = size(folders,1);
 
-for i=1:size(folders,1)
+for i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/histograms/training/',folderName,'_data.mat');
     % Read in the histogram
@@ -33,7 +32,7 @@ for i=1:size(folders,1)
     labels_training = horzcat(labels_training, label_training);
 end
 
-for i=1:size(folders,1)
+for i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/histograms/testing/',folderName,'_data.mat');
     % Read in the histogram
