@@ -1,23 +1,31 @@
 clear all
 
 %Add library paths
-addpath ./lib/cqt_toolbox
-addpath ./lib/k-svd
-addpath ./lib/fast-additive-svms
-addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1
+addpath lib/cqt_toolbox
+addpath lib/k-svd
+addpath lib/fast-additive-svms
+addpath lib/fast-additive-svms/libsvm-mat-3.0-1
 % K-SVD implementation from Ron Rubinstein
-addpath ./lib/ompbox10/
-addpath ./lib/ksvdbox13/
+addpath lib/ompbox10
+addpath lib/ksvdbox13
 
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 
-%% Short time audio representation
+%print date and time
+fprintf('Starting script at: %s\n', datestr(now));
 
+%% Old data cleanup
+util_delete_data();
+
+%% Short time audio representation
+fprintf('\n_________________________________________\n');
+fprintf('== Short time audio feature generation ==\n');
 create_spec_from_gtzan(90);
 
 
 %% Codebook generation and encoding
-
+fprintf('\n_________________________________________\n');
+fprintf('== dictionary learning ==\n');
 create_dict_from_gtzan(50);
 
 % TODO Refactor and move to the right using and specified 
@@ -26,10 +34,16 @@ encode_features_using_dictionaries(target_sparcity);
 
 
 %% Code word encoding aggregation
+fprintf('\n_________________________________________\n');
+fprintf('== Bag of histograms creation ==\n');
 create_histograms_from_gtzan();
 
 
 %% SVM training
+fprintf('\n_________________________________________\n');
+fprintf('== SVM training ==\n');
+
+
 histograms = [];
 labels = [];
 
@@ -57,6 +71,12 @@ svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range);
 %C = 55;
 %svmmodel = boh_svm_train(TR' ,LTR',0,C);
 
+fprintf('\n_________________________________________\n');
+fprintf('== SVM model testingc==\n');
+
 %Make a prediction to test the model
 [svml,svmap,svmd] = boh_svm_predict(svmmodel, TE',LTE');
+
+%print date and time
+fprintf('Starting script at: %s\n', datestr(now));
 
