@@ -5,7 +5,7 @@ util_create_directory_structure(savePath);
 
 num_genres = size(folders,1);
   
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/sparserep/training/',folderName,'_data.mat');
     % Read in the dictionaries
@@ -16,11 +16,11 @@ for i=1:num_genres
     
     %write dictionary to file
     filename = strcat(savePath,'training/', char(folders(i)), '_data.mat');
-    save(filename, 'H_tr');
+    util_save_data(filename, H_tr, false);
             
 end
 
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/sparserep/testing/',folderName,'_data.mat');
     % Read in the dictionaries
@@ -31,6 +31,6 @@ for i=1:num_genres
     
     %write dictionary to file
     filename = strcat(savePath,'testing/', char(folders(i)), '_data.mat');
-    save(filename, 'H_te');
+    util_save_data(filename, H_te, false);
             
 end

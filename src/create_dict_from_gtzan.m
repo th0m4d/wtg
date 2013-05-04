@@ -14,7 +14,7 @@ end
 
 num_genres = size(folders,1);
 
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/spectrograms/training/',folderName,'_data.mat');
     % Read in the spectrogram
@@ -32,7 +32,7 @@ for i=1:num_genres
 
     %write dictionary to file
     filename = strcat(savePath, char(folders(i)), '_data.mat');
-    save(filename, 'D');
-    save(filename, 'A','-append');
+    util_save_data(filename, D, false);
+    util_save_data(filename, 'A',true);
             
 end

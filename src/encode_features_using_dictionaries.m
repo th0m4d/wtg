@@ -9,7 +9,7 @@ joint_D = [];
 num_genres = size(folders,1);
 
 % we join the dictionaries
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/dictionaries/',folderName,'_data.mat');
     % Read in the dictionaries
@@ -34,7 +34,7 @@ fprintf('Enconding samples using a dictionary  of %d columns \n',size(joint_D,2)
 G = joint_D' * joint_D;
 
 %Encode training (Necessary? - For the SVM I would say XD)
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/spectrograms/training/',folderName,'_data.mat');
     % Read in the spectrogram
@@ -43,19 +43,17 @@ for i=1:num_genres
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
-    gamma = omp(joint_D,spectogram,G, sparcity);
+    training_gamma = omp(joint_D,spectogram,G, sparcity);
     
     %write representation to file
     filename = strcat(savePathTraining, char(folders(i)), '_data.mat');
     fprintf('Saving %s\n',filename);
-    save(filename, 'gamma');
-
-            
+    util_save_data(filename, training_gamma, false);
 end
 
 %Encodeing testing
 %Remember that the dictionary has not been training using this files
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/spectrograms/testing/',folderName,'_data.mat');
     % Read in the spectrogram
@@ -64,13 +62,11 @@ for i=1:num_genres
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
-    gamma = omp(joint_D,spectogram,G, sparcity);
+    testing_gamma = omp(joint_D,spectogram,G, sparcity);
     
     %write representation to file
     filename = strcat(savePathTesting, char(folders(i)), '_data.mat');
     fprintf('Saving %',filename);
-    save(filename, 'gamma');
-
-            
+    util_save_data(filename, testing_gamma,false);
 end
 

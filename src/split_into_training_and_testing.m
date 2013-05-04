@@ -17,7 +17,7 @@ labels_testing = [];
 
 num_genres = size(folders,1);
 
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/histograms/training/',folderName,'_data.mat');
     % Read in the histogram
@@ -32,7 +32,7 @@ for i=1:num_genres
     labels_training = horzcat(labels_training, label_training);
 end
 
-for i=1:num_genres
+parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/histograms/testing/',folderName,'_data.mat');
     % Read in the histogram

@@ -25,7 +25,7 @@ testing_idxs = [];
 
 num_genres = size(folders,1);
 
-for i=1:num_genres;
+parfor i=1:num_genres;
     dat_training = [];
     dat_testing = [];
     folderName = char(folders(i));
@@ -53,8 +53,8 @@ for i=1:num_genres;
     filename_tr = strcat(savePathTraining,folderName ,'_data');
     filename_te = strcat(savePathTesting,folderName ,'_data');
 
-    save(filename_tr, 'dat_training');
-    save(filename_te, 'dat_testing');
+    util_save_data(filename_tr, dat_training,false);
+    util_save_data(filename_te, dat_testing,false);
 
     
 end
