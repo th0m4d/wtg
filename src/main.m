@@ -9,9 +9,17 @@ addpath lib/fast-additive-svms/libsvm-mat-3.0-1
 addpath lib/ompbox10
 addpath lib/ksvdbox13
 
+%% Configuration parameters
+
 %list of folders to be included into training
 %folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 folders = {'blues';'classical'};
+
+%numbers of iterations for the generation of the dictionary
+num_iterations = 10;
+
+%target sparcity for the encoding of the dictionary
+target_sparcity = 1;
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
@@ -28,11 +36,10 @@ create_spec_from_gtzan(90, folders);
 %% Codebook generation and encoding
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
-num_iterations = 10;
+
 create_dict_from_gtzan(50, num_iterations, folders);
 
 % TODO Refactor and move to the right using and specified 
-target_sparcity = 1;
 encode_features_using_dictionaries(target_sparcity, folders);
 
 

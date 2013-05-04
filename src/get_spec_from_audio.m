@@ -16,7 +16,7 @@ function [ spec ] = get_spec_from_audio( file_path )
     P_log = log(P);
     
     %normalize columns to l2-norm <= 1
-    P_norm = normc(P);
+    P_norm = normc(P_log);
     spec = P_norm;
 
 end
