@@ -53,8 +53,8 @@ parfor i=1:num_genres;
     filename_tr = strcat(savePathTraining,folderName ,'_data');
     filename_te = strcat(savePathTesting,folderName ,'_data');
 
-    util_save_data(filename_tr, dat_training,false);
-    util_save_data(filename_te, dat_testing,false);
+    util_save_data(filename_tr, dat_training);
+    util_save_data(filename_te, dat_testing);
 
     
 end

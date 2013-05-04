@@ -19,7 +19,7 @@ parfor i=1:num_genres
     path = strcat('data/spectrograms/training/',folderName,'_data.mat');
     % Read in the spectrogram
     spectrogram = load(path);
-    spectrogram = spectrogram.dat_training;
+    spectrogram = spectrogram.data;
 
     disp(strcat('Training dictionary for genre: ', folderName));
     disp(strcat('Processing file: ', path));
@@ -31,8 +31,7 @@ parfor i=1:num_genres
     [ D, A ] = train_dictionary_ksvdbox(genre_dict_size,spectrogram, size(spectrogram,2)/100, 1, num_iterations);
 
     %write dictionary to file
-    filename = strcat(savePath, char(folders(i)), '_data.mat');
-    util_save_data(filename, D, false);
-    util_save_data(filename, 'A',true);
+    filename = strcat(savePath, char(folders(i)), 'dict_data.mat');
+    util_save_data(filename, D);
             
 end

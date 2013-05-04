@@ -21,10 +21,10 @@ parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/histograms/training/',folderName,'_data.mat');
     % Read in the histogram
-    data = load(path);
+    histogram_training = load(path);
     %histogram = data.H;
     
-    training = data.H_tr;
+    training = histogram_training.data;
     histograms_training = horzcat(histograms_training, training);
     label_training = ones(1,size(training,2)) * i;
     
@@ -36,10 +36,10 @@ parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/histograms/testing/',folderName,'_data.mat');
     % Read in the histogram
-    data = load(path);
+    histogram_testing = load(path);
     %histogram = data.H;
     
-    testing = data.H_te;
+    testing = histogram_testing.data;
     histograms_testing = horzcat(histograms_testing, testing);
     label_testing = ones(1,size(testing,2)) * i;
     

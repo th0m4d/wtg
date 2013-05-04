@@ -11,12 +11,12 @@ num_genres = size(folders,1);
 % we join the dictionaries
 parfor i=1:num_genres
     folderName = char(folders(i));
-    path = strcat('data/dictionaries/',folderName,'_data.mat');
+    path = strcat('data/dictionaries/',folderName,'dict_data.mat');
     % Read in the dictionaries
-    data = load(path);
+    dictionary = load(path);
     %encoding = data.A;
     
-    joint_D = horzcat(joint_D,data.D);
+    joint_D = horzcat(joint_D,dictionary.data);
     
     %H = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
@@ -39,7 +39,7 @@ parfor i=1:num_genres
     path = strcat('data/spectrograms/training/',folderName,'_data.mat');
     % Read in the spectrogram
     spectogram = load(path);
-    spectogram = spectogram.dat_training;
+    spectogram = spectogram.data;
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
@@ -48,7 +48,7 @@ parfor i=1:num_genres
     %write representation to file
     filename = strcat(savePathTraining, char(folders(i)), '_data.mat');
     fprintf('Saving %s\n',filename);
-    util_save_data(filename, training_gamma, false);
+    util_save_data(filename, training_gamma);
 end
 
 %Encodeing testing
@@ -58,7 +58,7 @@ parfor i=1:num_genres
     path = strcat('data/spectrograms/testing/',folderName,'_data.mat');
     % Read in the spectrogram
     spectogram = load(path);
-    spectogram = spectogram.dat_testing;
+    spectogram = spectogram.data;
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
@@ -67,6 +67,6 @@ parfor i=1:num_genres
     %write representation to file
     filename = strcat(savePathTesting, char(folders(i)), '_data.mat');
     fprintf('Saving %',filename);
-    util_save_data(filename, testing_gamma,false);
+    util_save_data(filename, testing_gamma);
 end
 

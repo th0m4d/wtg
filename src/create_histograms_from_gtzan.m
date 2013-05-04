@@ -9,14 +9,14 @@ parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/sparserep/training/',folderName,'_data.mat');
     % Read in the dictionaries
-    data = load(path);
-    encoding = data.gamma;
+    gamma = load(path);
+    encoding = gamma.data;
 
     H_tr = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
     %write dictionary to file
     filename = strcat(savePath,'training/', char(folders(i)), '_data.mat');
-    util_save_data(filename, H_tr, false);
+    util_save_data(filename, H_tr);
             
 end
 
@@ -24,13 +24,13 @@ parfor i=1:num_genres
     folderName = char(folders(i));
     path = strcat('data/sparserep/testing/',folderName,'_data.mat');
     % Read in the dictionaries
-    data = load(path);
-    encoding = data.gamma;
+    gamma = load(path);
+    encoding = gamma.data;
 
     H_te = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
     %write dictionary to file
     filename = strcat(savePath,'testing/', char(folders(i)), '_data.mat');
-    util_save_data(filename, H_te, false);
+    util_save_data(filename, H_te);
             
 end

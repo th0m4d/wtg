@@ -81,5 +81,5 @@ fprintf('== SVM model testingc==\n');
 [svml,svmap,svmd] = boh_svm_predict(svmmodel, TE',LTE');
 
 %print date and time
-fprintf('Starting script at: %s\n', datestr(now));
+fprintf('Finishing script at: %s\n', datestr(now));
 
