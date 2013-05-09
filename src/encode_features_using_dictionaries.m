@@ -1,4 +1,4 @@
-function gamma = encode_features_using_dictionaries(sparcity, folders)
+function gamma = encode_features_using_dictionaries(sparcity, folders, feature_extraction_method)
 
 addpath ./lib/ompbox10/
 
@@ -36,14 +36,14 @@ G = joint_D' * joint_D;
 %Encode training (Necessary? - For the SVM I would say XD)
 for i=1:num_genres
     folderName = char(folders(i));
-    path = strcat('data/spectrograms/training/',folderName,'_data.mat');
+    path = strcat('data/', feature_extraction_method, 's', '/training/',folderName,'_data.mat');
     % Read in the spectrogram
-    spectogram = load(path);
-    spectogram = spectogram.dat_training;
+    feature = load(path);
+    feature = feature.dat_training;
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
-    gamma = omp(joint_D,spectogram,G, sparcity);
+    gamma = omp(joint_D,feature,G, sparcity);
     
     %write representation to file
     filename = strcat(savePathTraining, char(folders(i)), '_data.mat');
@@ -57,20 +57,19 @@ end
 %Remember that the dictionary has not been training using this files
 for i=1:num_genres
     folderName = char(folders(i));
-    path = strcat('data/spectrograms/testing/',folderName,'_data.mat');
+    path = strcat('data/', feature_extraction_method, 's', '/testing/',folderName,'_data.mat');
     % Read in the spectrogram
-    spectogram = load(path);
-    spectogram = spectogram.dat_testing;
+    feature = load(path);
+    feature = feature.dat_testing;
 
     disp(strcat('Encoding genre:', folderName));
     % We enconde using OMP per genre
-    gamma = omp(joint_D,spectogram,G, sparcity);
+    gamma = omp(joint_D,feature,G, sparcity);
     
     %write representation to file
     filename = strcat(savePathTesting, char(folders(i)), '_data.mat');
     fprintf('Saving %',filename);
     save(filename, 'gamma');
-
             
 end
 
