@@ -8,7 +8,7 @@ function create_spec_from_gtzan(training_percentage, folders,prep)
 
 % if prep is not set use normalization by default
 if nargin < 3
-    prep = 'norm';
+    prep = 'none';
  end
 
 num_songs = 100; % number of songs to process per each genre

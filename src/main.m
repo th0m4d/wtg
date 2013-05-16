@@ -43,7 +43,7 @@ end
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
 
-create_dict_from_gtzan(50, num_iterations, folders, ex_method);
+create_dict_from_gtzan(50, num_iterations,target_sparcity,folders, ex_method);
 
 encode_features_using_dictionaries(target_sparcity, folders, ex_method);
 

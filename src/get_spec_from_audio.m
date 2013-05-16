@@ -17,10 +17,13 @@ function [ spec ] = get_spec_from_audio( file_path,prep)
     if(strcmp('log',prep))
     %create the log spectrogram.
         P = log(P);
-    else 
+    end
+    
+    if(strcmp('norm',prep))
     %normalize columns to l2-norm <= 1
         P = normc(P);
     end
+    
     
    
     spec = P;
