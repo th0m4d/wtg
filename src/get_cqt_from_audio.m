@@ -20,11 +20,10 @@ fmin = 65.4064; %lower boundary for CQT (lowest frequency bin will be immediatel
 Xcqt = cqt(y,fmin,fmax,bins_per_octave,Fs);
 CQT = getCQT(Xcqt,'all','all');
 
+%normalize columns to l2-norm <= 1
+CQT = normc(CQT);
+
 %plotCQT(Xcqt,fs,0.6,'surf');
-
-
-
-
 
 end
 
