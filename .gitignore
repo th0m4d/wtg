@@ -2,10 +2,5 @@
 .DS_Store
 genres/
 spectrograms/
-src/test.au
-src/data/histograms/
-src/data/dictionaries/
-src/data/genres/        
-src/data/sparserep/    
-src/data/spectrograms/
+src/data/*
 *.o 

@@ -15,6 +15,9 @@ addpath lib/ksvdbox13
 %folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 folders = {'blues';'classical'};
 
+%feature extraction method: spectrogram or cqt
+ex_method = 'spectrogram'
+
 %numbers of iterations for the generation of the dictionary
 num_iterations = 10;
 
@@ -30,48 +33,34 @@ util_delete_data();
 %% Short time audio representation
 fprintf('\n_________________________________________\n');
 fprintf('== Short time audio feature generation ==\n');
-create_spec_from_gtzan(90, folders);
-
+if(strcmp(ex_method, 'spectrogram') == 1)
+    create_spec_from_gtzan(90, folders);
+elseif(strcmp(ex_method, 'cqt') == 1)
+    create_cqts_from_gtzan(90, folders);
+end
 
 %% Codebook generation and encoding
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
 
-create_dict_from_gtzan(50, num_iterations, folders);
+create_dict_from_gtzan(50, num_iterations, folders, ex_method);
 
-% TODO Refactor and move to the right using and specified 
-encode_features_using_dictionaries(target_sparcity, folders);
-
+encode_features_using_dictionaries(target_sparcity, folders, ex_method);
 
 %% Code word encoding aggregation
 fprintf('\n_________________________________________\n');
 fprintf('== Bag of histograms creation ==\n');
 create_histograms_from_gtzan(folders);
 
-
 %% SVM training
 fprintf('\n_________________________________________\n');
 fprintf('== SVM training ==\n');
-
 
 histograms = [];
 labels = [];
 
 
 [TR,TE,LTR,LTE] = split_into_training_and_testing(folders);
-
-
-% 
-% for i=1:size(folders,1)
-%     folderName = char(folders(i));
-%     path = strcat('data/histograms/',folderName,'_data.mat');
-%     % Read in the histogram
-%     data = load(path);
-%     histogram = data.H;
-%     histograms = horzcat(histograms, histogram);
-%     label = ones(1,size(histogram,2)) * i;
-%     labels = horzcat(labels, label);
-% end
 
 % call like this to perform cross validation
 xvalidation_range = power(1.5,5:0.7:12);
