@@ -14,7 +14,7 @@ function [ spec ] = get_spec_from_audio( file_path,prep)
     [S,F,T,P] = spectrogram(Y,hann(windowSize), overlap, windowSize, Fs);
     
     
-    if(prep = 'log')
+    if(strcmp('log',prep))
     %create the log spectrogram.
         P = log(P);
     else 
