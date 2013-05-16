@@ -1,8 +1,15 @@
-function create_spec_from_gtzan(training_percentage, folders)
+function create_spec_from_gtzan(training_percentage, folders,prep)
 % This function create the spectograms for the songs in the dataset
 % at the same time it splits those spectograms into training and testing
 % (storing in in different subdirectories) the amount of songs used for
 % training is controlled by the paramter training_percentage
+% @param prep = one of 'norm¡ or 'log'. Apply either normalization or log
+% applied to the spectrogram prior to returning. By default use = 'norm'
+
+% if prep is not set use normalization by default
+if nargin < 3
+    prep = 'norm';
+ end
 
 
 %Add library paths
@@ -37,14 +44,14 @@ for i=1:num_genres;
     fprintf('Creating Spectrograms of genre %s for training set\n',folderName);
     for j=training_idxs
         path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');        
-        P = get_spec_from_audio(path);
+        P = get_spec_from_audio(path,prep);
         dat_training = horzcat(dat_training, P);
     end
     
     fprintf('Creating Spectrograms of genre %s for testing set\n',folderName);
     for j=testing_idxs
         path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');
-        P = get_spec_from_audio(path);
+        P = get_spec_from_audio(path,prep);
         dat_testing = horzcat(dat_testing, P);
     end
     
