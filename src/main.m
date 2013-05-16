@@ -24,6 +24,13 @@ num_iterations = 10;
 %target sparcity for the encoding of the dictionary
 target_sparcity = 1;
 
+%Percentage of the data which is used for training. The rest is used for
+%testing
+training_precentage = 50;
+
+%size of the dictionary per genre
+dict_size = 50;
+
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
 
@@ -34,16 +41,16 @@ util_delete_data();
 fprintf('\n_________________________________________\n');
 fprintf('== Short time audio feature generation ==\n');
 if(strcmp(ex_method, 'spectrogram') == 1)
-    create_spec_from_gtzan(90, folders);
+    create_spec_from_gtzan(training_precentage, folders);
 elseif(strcmp(ex_method, 'cqt') == 1)
-    create_cqts_from_gtzan(90, folders);
+    create_cqts_from_gtzan(training_precentage, folders);
 end
 
 %% Codebook generation and encoding
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
 
-create_dict_from_gtzan(50, num_iterations,target_sparcity,folders, ex_method);
+create_dict_from_gtzan(dict_size, num_iterations,target_sparcity, folders, ex_method);
 
 encode_features_using_dictionaries(target_sparcity, folders, ex_method);
 
