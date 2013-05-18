@@ -21,7 +21,7 @@ Xcqt = cqt(y,fmin,fmax,bins_per_octave,Fs);
 CQT = getCQT(Xcqt,'all','all');
 
 %normalize columns to l2-norm <= 1
-CQT = normc(CQT);
+CQT = normr(CQT);
 
 %plotCQT(Xcqt,fs,0.6,'surf');
 

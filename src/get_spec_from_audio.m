@@ -16,12 +16,12 @@ function [ spec ] = get_spec_from_audio( file_path,prep)
     
     if(strcmp('log',prep))
     %create the log spectrogram.
+        fprintf('Spectrogram is brought to a logarithmic scale\n');
         P = log(P);
-    end
-    
-    if(strcmp('norm',prep))
+    elseif(strcmp('norm',prep))
     %normalize columns to l2-norm <= 1
-        P = normc(P);
+        fprintf('Spectrogram is normalized between [0,1]\n');
+        P = normr(P);
     end
     
     

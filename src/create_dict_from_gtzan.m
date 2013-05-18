@@ -1,4 +1,4 @@
-function create_dict_from_gtzan(genre_dict_size, num_iterations, target_sparcity, folders, feature_extraction_method)
+function create_dict_from_gtzan(genre_dict_size, num_iterations, target_sparcity, folders, feature_extraction_method, varargin)
 % This function create the dictionaries from the spectogram of gtzans
 % genre_dict_size is the size of the dictionary for each genre.
 % the dictionaries are written in data/dictionaries
@@ -26,7 +26,7 @@ for i=1:num_genres
     
     % there was an error here when dividing by then. A inner loop is
     % missing.
-    [ D, A ] = train_dictionary_ksvdbox(genre_dict_size,feature, size(feature,2)/100, target_sparcity, num_iterations);
+    [ D, A ] = train_dictionary_ksvdbox(genre_dict_size,feature, size(feature,2)/100, target_sparcity, num_iterations, varargin);
 
     %write dictionary to file
     filename = strcat(savePath, char(folders(i)), '_data.mat');
