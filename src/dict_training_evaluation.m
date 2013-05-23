@@ -8,13 +8,13 @@ folders = {'blues'};
 ex_method = 'spectrogram';
 
 %numbers of iterations for the generation of the dictionary
-num_iterations = 100;
+num_iterations = 50;
 
 %target sparcity for the encoding of the dictionary
-target_sparcity = 5;
+target_sparcity = 1;
 
 %size of the dictionary per genre
-dict_size = 100;
+dict_size = 200;
 
 num_of_training_samples = 1000;
 

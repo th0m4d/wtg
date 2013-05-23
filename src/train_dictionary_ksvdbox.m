@@ -9,11 +9,13 @@ addpath ./lib/ksvdbox13
 number_of_samples = size(signals,2);
 sample_dimension = size(signals,1);
 
-if  isa(varargin{1}{1},'double')
-    num_training_samples = varargin{1}{1};
-    idxs = randperm(number_of_samples,num_training_samples)-1;
-    signals = signals(:,idxs);
-    number_of_samples = size(signals,2);
+if  size(varargin{1}) > 0
+    if isa(varargin{1}{1},'double')
+        num_training_samples = varargin{1}{1};
+        idxs = randperm(number_of_samples,num_training_samples)-1;
+        signals = signals(:,idxs);
+        number_of_samples = size(signals,2);
+    end
 end
 
 %Generate dictioanry of random dict_size column selected from Y (Signals) 
