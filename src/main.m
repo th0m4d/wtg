@@ -13,13 +13,13 @@ addpath lib/ksvdbox13
 
 %list of folders to be included into training
 %folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
-folders = {'blues';'classical'};
+folders = {'blues';'classical';'country';'disco'};
 
 %feature extraction method: spectrogram or cqt
 ex_method = 'spectrogram'
 
 %numbers of iterations for the generation of the dictionary
-num_iterations = 10;
+num_iterations = 100;
 
 %target sparcity for the encoding of the dictionary
 target_sparcity = 1;
@@ -41,7 +41,7 @@ util_delete_data();
 fprintf('\n_________________________________________\n');
 fprintf('== Short time audio feature generation ==\n');
 if(strcmp(ex_method, 'spectrogram') == 1)
-    create_spec_from_gtzan(training_precentage, folders);
+    create_spec_from_gtzan(training_precentage, folders,'norm');
 elseif(strcmp(ex_method, 'cqt') == 1)
     create_cqts_from_gtzan(training_precentage, folders);
 end
