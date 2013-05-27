@@ -21,7 +21,7 @@ function [ spec ] = get_spec_from_audio( file_path,prep)
     elseif(strcmp('norm',prep))
     %normalize columns to l2-norm <= 1
         fprintf('Spectrogram is normalized between [0,1]\n');
-        P = normr(P);
+        P = normc(P);
     end
     
     
