@@ -12,24 +12,24 @@ addpath lib/ksvdbox13
 %% Configuration parameters
 
 %list of folders to be included into training
-%folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
-folders = {'blues';'classical';'country';'disco'};
+folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
+%folders = {'blues';'classical';'country';'disco'};
 
 %feature extraction method: spectrogram or cqt
 ex_method = 'spectrogram'
 
 %numbers of iterations for the generation of the dictionary
-num_iterations = 100;
+num_iterations = 35;
 
 %target sparcity for the encoding of the dictionary
 target_sparcity = 1;
 
 %Percentage of the data which is used for training. The rest is used for
 %testing
-training_precentage = 50;
+training_precentage = 90;
 
 %size of the dictionary per genre
-dict_size = 50;
+dict_size = 300;
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
@@ -70,7 +70,8 @@ labels = [];
 [TR,TE,LTR,LTE] = split_into_training_and_testing(folders);
 
 % call like this to perform cross validation
-xvalidation_range = power(1.5,5:0.7:12);
+%[init,increase,finish] = [-5,0.7,3];
+xvalidation_range =  power(2,-8:0.5:-3.5); % power(2,-3:0.7:2);
 svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range);
 
 %call like this to train with an specific value
@@ -84,5 +85,5 @@ fprintf('== SVM model testingc==\n');
 [svml,svmap,svmd] = boh_svm_predict(svmmodel, TE',LTE');
 
 %print date and time
-fprintf('Starting script at: %s\n', datestr(now));
+fprintf('Finishing script at: %s\n', datestr(now));
 

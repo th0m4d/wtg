@@ -19,11 +19,11 @@ if  size(varargin{1}) > 0
 end
 
 %Generate dictioanry of random dict_size column selected from Y (Signals) 
-%range = ceil(1 + (number_of_samples-1).*rand(dictsize,1));
-%D = signals(:,range);
+range = ceil(1 + (number_of_samples-1).*rand(dictsize,1));
+D = signals(:,range);
 
 %Use random dictionary for training
-D = normc(randn(sample_dimension,number_of_samples));
+%D = normc(randn(sample_dimension,number_of_samples));
 
 % how many songs to process?
 data_num_cols =  size(signals,2);
@@ -40,6 +40,7 @@ params.initdict = D;
 %params.exact = 1;
 params.iternum = num_iter;
 params.memusage = 'high';
+%params.muthresh = 0.9;
 [Dksvd,A,err] = ksvd(params,'irt');
 
 %% show results %%
