@@ -1,36 +1,18 @@
 function create_histograms_from_gtzan(folders)
 
+%Creating the histograms runs pretty quick. For now there is no need to
+%wrap them into a job (the overhead takes longer than the actual
+%computation).
+
 savePath = './data/histograms/';
 util_create_directory_structure(savePath);
 
-num_genres = size(folders,1);
+num_genres = size(folders,2);
   
 for i=1:num_genres
-    folderName = char(folders(i));
-    path = strcat('data/sparserep/training/',folderName,'_data.mat');
-    % Read in the dictionaries
-    data = load(path);
-    encoding = data.gamma;
-
-    H_tr = get_bag_of_histograms(encoding, 22050, 1024, 5);
-    
-    %write dictionary to file
-    filename = strcat(savePath,'training/', char(folders(i)), '_data.mat');
-    save(filename, 'H_tr');
-            
+    create_training_histogram_for_genre(char(folders(i)));
 end
 
 for i=1:num_genres
-    folderName = char(folders(i));
-    path = strcat('data/sparserep/testing/',folderName,'_data.mat');
-    % Read in the dictionaries
-    data = load(path);
-    encoding = data.gamma;
-
-    H_te = get_bag_of_histograms(encoding, 22050, 1024, 5);
-    
-    %write dictionary to file
-    filename = strcat(savePath,'testing/', char(folders(i)), '_data.mat');
-    save(filename, 'H_te');
-            
+    create_testing_histogram_for_genre(char(folders(i)));         
 end
