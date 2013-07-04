@@ -8,10 +8,7 @@ function create_spec_from_gtzan(training_percentage, folders,prep)
 
 num_genres = size(folders,2);
 
-% tic
-% create_spec_for_genre(char(folders(1:1)), training_percentage);
-% toc
-
+%create job
 profileName = parallel.defaultClusterProfile();
 cluster = parcluster(profileName);
 job = createJob(cluster)
