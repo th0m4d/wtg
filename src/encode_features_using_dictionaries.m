@@ -26,34 +26,24 @@ G = joint_D' * joint_D;
 %create job
 profileName = parallel.defaultClusterProfile();
 cluster = parcluster(profileName);
-job_training = createJob(cluster)
+job = createJob(cluster)
 
 %Encode training (Necessary? - For the SVM I would say XD)
 for i=1:num_genres
-    createTask(job_training, @encode_training_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTraining});
+    createTask(job, @encode_training_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTraining});
 end
-
-fprintf('Starting job to encode training data.\n');
-%job.Tasks
-submit(job_training)
-wait(job_training)
-delete(job_training)
-fprintf('Job finished.\n');
-
-%create job
-job_testing = createJob(cluster)
 
 %Encodeing testing
 %Remember that the dictionary has not been training using this files
 for i=1:num_genres
-    createTask(job_testing, @encode_testing_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTesting});
+    createTask(job, @encode_testing_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTesting});
 end
 
-fprintf('Starting job to encode testing data.\n');
+fprintf('Starting job to encode data.\n');
 %job.Tasks
-submit(job_testing)
-wait(job_testing)
-delete(job_testing)
+submit(job)
+wait(job)
+delete(job)
 fprintf('Job finished.\n');
 
 
