@@ -12,8 +12,8 @@ addpath lib/ksvdbox13
 %% Configuration parameters
 
 %list of folders to be included into training
-folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
-%folders = {'blues';'classical';'country';'disco'};
+folders = {'blues', 'classical'}; %, 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+%folders = {'blues', 'classical', 'country', 'disco'};
 
 %feature extraction method: spectrogram or cqt
 ex_method = 'spectrogram'
@@ -86,4 +86,3 @@ fprintf('== SVM model testingc==\n');
 
 %print date and time
 fprintf('Finishing script at: %s\n', datestr(now));
-
