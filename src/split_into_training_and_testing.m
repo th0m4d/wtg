@@ -15,7 +15,7 @@ labels_testing = [];
 % Now this function is easier because the data is already splitted into two
 % different directories
 
-num_genres = size(folders,1);
+num_genres = size(folders,2);
 
 for i=1:num_genres
     folderName = char(folders(i));
