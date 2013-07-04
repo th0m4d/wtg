@@ -1,4 +1,4 @@
-function [ output_args ] = create_spec_for_genre(folderName, training_percentage)
+function create_spec_for_genre(folderName, training_percentage)
 %CREATE_SPEC_FOR_GENRE Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -7,14 +7,10 @@ if nargin < 3
     prep = 'none';
 end
 
-num_songs = 100; % number of songs to process per each genre
-
-% create directories if they don't exists
-savePathroot = './data/spectrograms/';
 savePathTraining = './data/spectrograms/training/';
 savePathTesting = './data/spectrograms/testing/';
 
-util_create_directory_structure(savePathroot);
+num_songs = 100; % number of songs to process per each genre
 
 dat_training = [];
 dat_testing = [];

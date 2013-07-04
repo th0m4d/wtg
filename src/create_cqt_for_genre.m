@@ -1,15 +1,12 @@
-function [ output_args ] = create_cqt_for_genre( folderName, training_percentage)
+function create_cqt_for_genre( folderName, training_percentage)
 %CREATE_CQT_FOR_GENRE Summary of this function goes here
 %   Detailed explanation goes here
 
     num_songs = 100; % number of songs to process per each genre
 
     % create directories if they don't exists
-    savePathroot = './data/cqts/';
     savePathTraining = './data/cqts/training/';
     savePathTesting = './data/cqts/testing/';
-
-    util_create_directory_structure(savePathroot);
 
     dat_training = [];
     dat_testing = [];

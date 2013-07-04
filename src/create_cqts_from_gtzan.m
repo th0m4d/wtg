@@ -6,6 +6,9 @@ function create_cqts_from_gtzan(training_percentage, folders)
 
 num_genres = size(folders,2);
 
+savePathroot = './data/cqts/';
+util_create_directory_structure(savePathroot);
+
 %create job
 profileName = parallel.defaultClusterProfile();
 cluster = parcluster(profileName);
@@ -16,9 +19,9 @@ for i=1:num_genres;
     createTask(job, @create_cqt_for_genre, 0, {char(folders(i)), training_percentage});
 end
 
-fprintf('Starting job to create specs from gtzan');
+fprintf('Starting job to create cqts from gtzan\n');
 %job.Tasks
 submit(job)
 wait(job)
 delete(job)
-fprintf('Job finished.');
+fprintf('Job finished.\n');

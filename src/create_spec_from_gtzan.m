@@ -8,6 +8,11 @@ function create_spec_from_gtzan(training_percentage, folders,prep)
 
 num_genres = size(folders,2);
 
+% create directories if they don't exists
+savePathroot = './data/spectrograms/';
+
+util_create_directory_structure(savePathroot);
+
 %create job
 profileName = parallel.defaultClusterProfile();
 cluster = parcluster(profileName);
@@ -17,9 +22,9 @@ for i=1:num_genres;
     createTask(job, @create_spec_for_genre, 0, {char(folders(i)), training_percentage});
 end
 
-fprintf('Starting job to create specs from gtzan');
+fprintf('Starting job to create specs from gtzan\n');
 %job.Tasks
 submit(job)
 wait(job)
 delete(job)
-fprintf('Job finished.');
+fprintf('Job finished.\n');
