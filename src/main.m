@@ -14,12 +14,15 @@ addpath lib/ksvdbox13
 %list of folders to be included into training
 folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
 %folders = {'blues';'classical';'country';'disco'};
+%folders = {'blues';'classical'}
+
 
 %feature extraction method: spectrogram or cqt
 ex_method = 'spectrogram'
+%ex_method = 'cqt'
 
 %numbers of iterations for the generation of the dictionary
-num_iterations = 35;
+num_iterations = 40;
 
 %target sparcity for the encoding of the dictionary
 target_sparcity = 1;
@@ -29,7 +32,7 @@ target_sparcity = 1;
 training_precentage = 90;
 
 %size of the dictionary per genre
-dict_size = 300;
+dict_size = 200;
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
@@ -50,7 +53,8 @@ end
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
 
-create_dict_from_gtzan(dict_size, num_iterations,target_sparcity, folders, ex_method);
+random = 1;
+create_dict_from_gtzan(dict_size, num_iterations,target_sparcity, folders, ex_method,random);
 
 encode_features_using_dictionaries(target_sparcity, folders, ex_method);
 
