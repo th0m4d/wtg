@@ -12,8 +12,7 @@ addpath lib/ksvdbox13
 %% Configuration parameters
 
 %list of folders to be included into training
-folders = {'blues'; 'classical'; 'country'; 'disco'; 'hiphop'; 'jazz'; 'metal'; 'pop'; 'reggae'; 'rock'};
-%folders = {'blues';'classical';'country';'disco'};
+folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
 
 %feature extraction method: spectrogram or cqt
 ex_method = 'spectrogram'
