@@ -1,12 +1,10 @@
 function gamma = encode_features_using_dictionaries(sparcity, folders, feature_extraction_method)
 
-addpath ./lib/ompbox10/
-
-[savePathRoot,savePathTraining,savePathTesting] =  util_create_directory_structure('./data/sparserep/');
+[~,savePathTraining,savePathTesting] =  util_create_directory_structure('./data/sparserep/');
 
 joint_D = [];
 
-num_genres = size(folders,1);
+num_genres = size(folders,2);
 
 % we join the dictionaries
 for i=1:num_genres
@@ -15,15 +13,7 @@ for i=1:num_genres
     % Read in the dictionaries
     data = load(path);
     %encoding = data.A;
-    
     joint_D = horzcat(joint_D,data.D);
-    
-    %H = get_bag_of_histograms(encoding, 22050, 1024, 5);
-    
-    %write dictionary to file
-    %filename = strcat(savePath, char(folders(i)), '_data.mat');
-    %save(filename, 'H');
-            
 end
 
 fprintf('Enconding samples using a dictionary  of %d columns \n',size(joint_D,2));
@@ -33,43 +23,27 @@ fprintf('Enconding samples using a dictionary  of %d columns \n',size(joint_D,2)
 
 G = joint_D' * joint_D;
 
+%create job
+profileName = parallel.defaultClusterProfile();
+cluster = parcluster(profileName);
+job = createJob(cluster)
+
 %Encode training (Necessary? - For the SVM I would say XD)
 for i=1:num_genres
-    folderName = char(folders(i));
-    path = strcat('data/', feature_extraction_method, 's', '/training/',folderName,'_data.mat');
-    % Read in the spectrogram
-    feature = load(path);
-    feature = feature.dat_training;
-
-    disp(strcat('Encoding genre:', folderName));
-    % We enconde using OMP per genre
-    gamma = omp(joint_D,feature,G, sparcity);
-    
-    %write representation to file
-    filename = strcat(savePathTraining, char(folders(i)), '_data.mat');
-    fprintf('Saving %s\n',filename);
-    save(filename, 'gamma');
-
-            
+    createTask(job, @encode_training_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTraining});
 end
 
 %Encodeing testing
 %Remember that the dictionary has not been training using this files
 for i=1:num_genres
-    folderName = char(folders(i));
-    path = strcat('data/', feature_extraction_method, 's', '/testing/',folderName,'_data.mat');
-    % Read in the spectrogram
-    feature = load(path);
-    feature = feature.dat_testing;
-
-    disp(strcat('Encoding genre:', folderName));
-    % We enconde using OMP per genre
-    gamma = omp(joint_D,feature,G, sparcity);
-    
-    %write representation to file
-    filename = strcat(savePathTesting, char(folders(i)), '_data.mat');
-    fprintf('Saving %',filename);
-    save(filename, 'gamma');
-            
+    createTask(job, @encode_testing_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTesting});
 end
+
+fprintf('Starting job to encode data.\n');
+%job.Tasks
+submit(job)
+wait(job)
+delete(job)
+fprintf('Job finished.\n');
+
 
