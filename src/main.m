@@ -13,6 +13,8 @@ addpath lib/ksvdbox13
 
 %list of folders to be included into training
 folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+%folders = {'blues','classical', 'country', 'disco'} % 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+
 
 %feature extraction method: spectrogram or cqt
 ex_method = 'spectrogram'
@@ -29,7 +31,7 @@ target_sparcity = 1;
 training_precentage = 90;
 
 %size of the dictionary per genre
-dict_size = 200;
+dict_size = 400;
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
@@ -50,7 +52,7 @@ end
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
 
-random = 1;
+random = 0;
 create_dict_from_gtzan(dict_size, num_iterations,target_sparcity, folders, ex_method,random);
 
 encode_features_using_dictionaries(target_sparcity, folders, ex_method);
@@ -72,7 +74,7 @@ labels = [];
 
 % call like this to perform cross validation
 %[init,increase,finish] = [-5,0.7,3];
-xvalidation_range =  power(2,-8:0.5:-3.5); % power(2,-3:0.7:2);
+xvalidation_range = power(2,-3.5:0.5:2.5); % power(2,-3:0.7:2);
 svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range);
 
 %call like this to train with an specific value
