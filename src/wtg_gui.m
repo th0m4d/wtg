@@ -200,11 +200,15 @@ function openFile(handles)
     end
     
 function classify(handles)
+    global folders;
     filePath = get(handles.file_path_edit_text,'string');
     features = getFeatures(filePath, handles);
     encoding = encodeFeatures(features);
     histogram = getHistogram(encoding);
-    predict(histogram)
+    labels = predict(histogram);
+    voting = voteMajority(labels);
+    set(handles.genre_text,'string', folders(voting));
+    
 
 function [features] = getFeatures(filePath, handles)
     audio_feature = getCurrentPopupString(handles.audio_feature_popup);
@@ -229,11 +233,15 @@ function encoding = encodeFeatures(features)
 function [histogram] = getHistogram(encoding)
     histogram = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
-function predict(histogram)
+function labels = predict(histogram)
     global svmmodel;
     hist_size = size(histogram);
     labels = zeros(hist_size(2),1);
     [svml,svmap,svmd] = boh_svm_predict(svmmodel.svmmodel, histogram',labels);
+    labels = svml
+    
+function voting = voteMajority(labels)
+    voting = mode(labels)
 
 function str = getCurrentPopupString(hh)
     %# getCurrentPopupString returns the currently selected string in the popupmenu with handle hh
