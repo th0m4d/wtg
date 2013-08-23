@@ -61,14 +61,50 @@ guidata(hObject, handles);
 % UIWAIT makes wtg_gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 %Add library paths
-addpath ./src/lib/cqt_toolbox
-addpath ./src/lib/k-svd
-addpath ./src/lib/fast-additive-svms
-addpath ./src/lib/fast-additive-svms/libsvm-mat-3.0-1
+addpath ./lib/cqt_toolbox
+addpath ./lib/k-svd
+addpath ./lib/fast-additive-svms
+addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1
 % K-SVD implementation from Ron Rubinstein
-addpath ./src/lib/ompbox10
-addpath ./src/lib/ksvdbox13
+addpath ./lib/ompbox10
+addpath ./lib/ksvdbox13
 
+%target sparcity for the encoding
+global target_sparcity;
+target_sparcity = 1;
+
+global folders;
+folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+
+%load the dictionary from file system
+global dictionary;
+dictionary = loadDictionary();
+
+global G;
+G = dictionary' * dictionary;
+
+global svmmodel;
+svmmodel = loadSVMModel();
+
+function dictionary = loadDictionary()
+    %genre folders
+    global folders;
+    num_genres = size(folders,2);
+    dictionary = [];
+    for i=1:num_genres
+        folderName = char(folders(i));
+        path = strcat('data/dictionaries/',folderName,'_data.mat');
+        % Read in the dictionaries
+        data = load(path);
+        %encoding = data.A;
+        dictionary = horzcat(dictionary,data.D);
+    end
+    dictionary;
+    
+function svmmodel = loadSVMModel()
+    path = strcat('data/model/svmmodel.mat');
+    % Read in the svm model
+    svmmodel = load(path);        
 
 % --- Outputs from this function are returned to the command line.
 function varargout = wtg_gui_OutputFcn(hObject, eventdata, handles) 
@@ -158,31 +194,39 @@ end
 function openFile(handles)
     fileSpec = {'*.mp3;*.au'}
     [baseName, folder] = uigetfile(fileSpec,'Select audio file to open.');
-    filename = fullfile(folder, baseName)
+    filename = fullfile(folder, baseName);
     if filename ~= 0
         set(handles.file_path_edit_text,'string', filename);
     end
     
 function classify(handles)
     filePath = get(handles.file_path_edit_text,'string');
-    features = getFeatures(filePath, handles)
-    histogram = getHistogram(features)
-    
-function [histogram] = getHistogram(features)
-    histogram
-
+    features = getFeatures(filePath, handles);
+    encoding = encodeFeatures(features);
+    histogram = getHistogram(encoding);
 
 function [features] = getFeatures(filePath, handles)
-    audio_feature = getCurrentPopupString(handles.audio_feature_popup)
+    audio_feature = getCurrentPopupString(handles.audio_feature_popup);
     features = [];
     if strcmp(audio_feature, 'Spectrogram') == 1;
         features = get_spec_from_audio(filePath,'norm');
     elseif strcmp(audio_feature, 'CQT') == 1;
         features = get_cqt_from_audio(filePath);
     else
-        error('Audio feature not supported.')
+        error('Audio feature not supported.');
     end
-    features
+    features;
+    
+function encoding = encodeFeatures(features)
+    global dictionary;
+    global target_sparcity;
+    global G;
+    %enconde using OMP
+    gamma = omp(dictionary, features, G, target_sparcity);
+    encoding = gamma;
+    
+function [histogram] = getHistogram(encoding)
+    histogram = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
 function str = getCurrentPopupString(hh)
     %# getCurrentPopupString returns the currently selected string in the popupmenu with handle hh
