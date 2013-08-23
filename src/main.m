@@ -12,24 +12,30 @@ addpath lib/ksvdbox13
 %% Configuration parameters
 
 %list of folders to be included into training
-folders = {'blues', 'classical'}; %, 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
-%folders = {'blues', 'classical', 'country', 'disco'};
+folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
 
 %feature extraction method: spectrogram or cqt
 ex_method = 'spectrogram'
+%ex_method = 'cqt'
 
 %numbers of iterations for the generation of the dictionary
-num_iterations = 35;
+num_iterations = 50;
 
 %target sparcity for the encoding of the dictionary
-target_sparcity = 1;
+target_sparcity = 3;
 
 %Percentage of the data which is used for training. The rest is used for
 %testing
 training_precentage = 90;
 
 %size of the dictionary per genre
-dict_size = 300;
+dict_size = 200;
+
+xvalidation_range =  power(2,-3:0.7:4); % power(2,-3:0.7:2);
+
+random = false;
+
+prep = 'norm'
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
@@ -41,7 +47,7 @@ util_delete_data();
 fprintf('\n_________________________________________\n');
 fprintf('== Short time audio feature generation ==\n');
 if(strcmp(ex_method, 'spectrogram') == 1)
-    create_spec_from_gtzan(training_precentage, folders,'norm');
+    create_spec_from_gtzan(training_precentage, folders,prep);
 elseif(strcmp(ex_method, 'cqt') == 1)
     create_cqts_from_gtzan(training_precentage, folders);
 end
@@ -50,7 +56,7 @@ end
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
 
-create_dict_from_gtzan(dict_size, num_iterations,target_sparcity, folders, ex_method);
+create_dict_from_gtzan(dict_size, num_iterations,target_sparcity, folders, ex_method,random);
 
 encode_features_using_dictionaries(target_sparcity, folders, ex_method);
 
@@ -71,7 +77,6 @@ labels = [];
 
 % call like this to perform cross validation
 %[init,increase,finish] = [-5,0.7,3];
-xvalidation_range =  power(2,-8:0.5:-3.5); % power(2,-3:0.7:2);
 svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range);
 
 %call like this to train with an specific value
