@@ -1,9 +1,11 @@
-function [ Dksvd,A,err ] = train_dictionary_ksvdbox(dictsize, signals, cols_per_song, target_sparcity, num_iter, varargin)
+function [ Dksvd,A,err ] = train_dictionary_ksvdbox(dictsize, signals, cols_per_song, target_sparcity, num_iter,random,varargin)
 %TRAIN_DICTIONARY Using Rubinstein KSVD implementation
 %   Train a dictioonary using ksvdbox - K-SVD Dictionary training
 %   implementation by Ruybstein
 %   dict_size: the size of the spectogram
-%   
+%   random = true a random dictionary is used, otherway is taken from the 
+%   training data.
+
 addpath ./lib/ksvdbox13
 
 number_of_samples = size(signals,2);
@@ -18,12 +20,17 @@ if  size(varargin{1}) > 0
     end
 end
 
-%Generate dictioanry of random dict_size column selected from Y (Signals) 
-range = ceil(1 + (number_of_samples-1).*rand(dictsize,1));
-D = signals(:,range);
 
+if(random) 
 %Use random dictionary for training
-%D = normc(randn(sample_dimension,number_of_samples));
+    fprintf('Using a random dictionary');
+    D = normc(randn(sample_dimension,number_of_samples));
+else
+%Generate dictioanry of random dict_size column selected from Y (Signals)
+    fprintf('Extracting random dictionary randomly from data');
+    range = ceil(1 + (number_of_samples-1).*rand(dictsize,1));
+    D = signals(:,range);
+end
 
 % how many songs to process?
 data_num_cols =  size(signals,2);
