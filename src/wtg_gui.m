@@ -231,9 +231,9 @@ function [histogram] = getHistogram(encoding)
     
 function predict(histogram)
     global svmmodel;
-    hist_size = size(histogram)
-    labels = zeros(hist_size(1),1)
-    [svml,svmap,svmd] = boh_svm_predict(svmmodel, histogram',labels);
+    hist_size = size(histogram);
+    labels = zeros(hist_size(2),1);
+    [svml,svmap,svmd] = boh_svm_predict(svmmodel.svmmodel, histogram',labels);
 
 function str = getCurrentPopupString(hh)
     %# getCurrentPopupString returns the currently selected string in the popupmenu with handle hh
