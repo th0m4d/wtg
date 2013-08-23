@@ -22,26 +22,25 @@ ex_method = 'spectrogram'
 num_iterations = 50;
 
 %target sparcity for the encoding of the dictionary
-target_sparcity = 3;
+target_sparsity = 2;
 
 %Percentage of the data which is used for training. The rest is used for
 %testing
 training_precentage = 90;
 
 %size of the dictionary per genre
-dict_size = 200;
-
-xvalidation_range =  power(2,-3:0.7:4); % power(2,-3:0.7:2);
-
-random = false;
-
-prep = 'norm'
+dict_size = 100;
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
 
+
+%If we use random vector to initialize the Dictionary
+random = 0;
+
+
 %% Old data cleanup
-util_delete_data();
+%util_delete_data();
 
 %% Short time audio representation
 fprintf('\n_________________________________________\n');
@@ -56,9 +55,9 @@ end
 fprintf('\n_________________________________________\n');
 fprintf('== dictionary learning ==\n');
 
-create_dict_from_gtzan(dict_size, num_iterations,target_sparcity, folders, ex_method,random);
+create_dict_from_gtzan(dict_size, num_iterations,target_sparsity, folders, ex_method,random);
 
-encode_features_using_dictionaries(target_sparcity, folders, ex_method);
+encode_features_using_dictionaries(target_sparsity, folders, ex_method);
 
 %% Code word encoding aggregation
 fprintf('\n_________________________________________\n');
@@ -77,6 +76,9 @@ labels = [];
 
 % call like this to perform cross validation
 %[init,increase,finish] = [-5,0.7,3];
+%xvalidation_range = power(2,2.7:0.2:4.0) % 
+xvalidation_range = power(2,-3.5:0.5:2.5); 
+%xvalidation_range =   power(2,-3:0.7:2);
 svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range);
 
 %call like this to train with an specific value
