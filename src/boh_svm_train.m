@@ -1,4 +1,4 @@
-function  svmmodel  = boh_svm_train( histograms,labels,range,C)
+function  svmmodel  = boh_svm_train( histograms,labels,range,use_multithreading)
 % boh_svm_train Train a SVM using a bog kernel
 % This implements binary classification so it is a class vs another
 % First add to the path the modified version of libsvm with the
@@ -11,19 +11,16 @@ function  svmmodel  = boh_svm_train( histograms,labels,range,C)
 addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1/
 addpath ./lib/fast-additive-svms/
 
-  
-doxvalidation = 1;
-
-if nargin < 4
-   C = 1;
+if(size(range,2)  > 1)  % if the range len is bigger than do xvalidation
+    doxvalidation = 1;  % other wise train directly   
+    C = range(1); % use the only c in the range
 end
 
-if nargin > 3
-    if range == 0
-    doxvalidation = 0;
-    end
-end
 
+if(nargin < 4)
+    % use multithreading by default
+    use_multithreading = 1;   
+end
 
 % model = svmtrain(histograms,labels);
 % default C-SVM model with C = 1 and 10-fold cross validation
@@ -43,26 +40,59 @@ if doxvalidation == 1 % crosvalidation
 fprintf('Training model using 10-fold cross validation from C= %d to %d...\n',cval(1),cval(size(cval,2)));
 fprintf('Training with %d training samples \n',size(labels,1));
 
-for i = 1:size(cval,2)
-      fprintf('Training with %0.5f \n',cval(i));
-      newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i)));
-      if ( newacc > acc) 
-          acc = newacc;
-          C = cval(i);
-      end
+
+if(use_multithreading == 0)
+    for i = 1:size(cval,2)
+         fprintf('Training with %0.5f \n',cval(i));
+         newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i)));
+         if ( newacc > acc) 
+              acc = newacc;
+              C = cval(i);
+         end
       
-     if(acc >= 99)
-          break;
+      if(acc >= 99)
+              break;
       end
+    end
+else
+    %create job
+    profileName = parallel.defaultClusterProfile();
+    cluster = parcluster(profileName);
+    job = createJob(cluster);
+
+    for i=1:size(cval,2); 
+       createTask(job, @svmtrain, 1, {labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i))});
+    end
+    submit(job);
+    wait(job);
+    taskoutput = fetchOutputs(job);
+    
+    %lets get the best model 
+    acc = 0;
+    for i=1:size(cval,2)
+       new_acc =  taskoutput{i};
+       if(new_acc > acc)
+           acc = new_acc;
+           C = cval(i);
+       end
+    end
+    
+    
+    disp(taskoutput{1})
+    delete(job)
+    fprintf('SVM Cross validation Job finished.\n');
+    
 end
+    
+
 
 
 %C = cval(i);
 
 fprintf('Best parameter C=%i with an accuracy of %f\n',C,acc);
 fprintf('Retraining...'); %Cross validation END
-else
-    
+
+else     
 fprintf('Training model directly with C=%i..',C);    
 end 
 
