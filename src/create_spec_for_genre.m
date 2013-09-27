@@ -1,4 +1,4 @@
-function create_spec_for_genre(folderName, training_percentage)
+function create_spec_for_genre(folderName, training_percentage,prep)
 %CREATE_SPEC_FOR_GENRE Summary of this function goes here
 %   Detailed explanation goes here
 
