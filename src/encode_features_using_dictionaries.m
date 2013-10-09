@@ -1,10 +1,15 @@
-function gamma = encode_features_using_dictionaries(sparcity, folders, feature_extraction_method)
+function gamma = encode_features_using_dictionaries(sparcity, folders, feature_extraction_method,use_testing)
 
 [~,savePathTraining,savePathTesting] =  util_create_directory_structure('./data/sparserep/');
 
 joint_D = [];
 
 num_genres = size(folders,2);
+
+if ~exist('use_testing','var') || isempty(use_testing)
+  use_testing=1;
+end
+
 
 % we join the dictionaries
 for i=1:num_genres
@@ -35,8 +40,10 @@ end
 
 %Encodeing testing
 %Remember that the dictionary has not been training using this files
-for i=1:num_genres
-    createTask(job, @encode_testing_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTesting});
+if use_testing
+    for i=1:num_genres
+        createTask(job, @encode_testing_data_per_genre, 0, {char(folders(i)), feature_extraction_method, sparcity, G, joint_D, savePathTesting});
+    end
 end
 
 fprintf('Starting job to encode data.\n');
