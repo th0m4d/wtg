@@ -3,7 +3,7 @@ function create_spec_from_gtzan(training_percentage, folders,prep)
 % at the same time it splits those spectograms into training and testing
 % (storing in in different subdirectories) the amount of songs used for
 % training is controlled by the paramter training_percentage
-% @param prep = one of 'norm¡ or 'log'. Apply either normalization or log
+% @param prep = one of 'norm' or 'log'. Apply either normalization or log
 % applied to the spectrogram prior to returning. By default use = 'norm'
 
 num_genres = size(folders,2);
@@ -19,7 +19,7 @@ cluster = parcluster(profileName);
 job = createJob(cluster)
 
 for i=1:num_genres; 
-    createTask(job, @create_spec_for_genre, 0, {char(folders(i)), training_percentage});
+    createTask(job, @create_spec_for_genre, 0, {char(folders(i)), training_percentage,prep});
 end
 
 fprintf('Starting job to create specs from gtzan\n');
