@@ -6,8 +6,18 @@ function [ spec ] = get_spec_from_audio( file_path,prep)
 
     %% Read in the sound data
     fprintf('Processing file %s \n',file_path);
-    [Y,Fs,BITS] = auread(file_path);
-    %%Compute spectrum
+    
+    [~, ~, ext] = fileparts(file_path); 
+    Y = []
+    Fs = []
+    if strcmp(ext,'.au') == 1
+        [Y,Fs,~] = auread(file_path);
+    elseif strcmp(ext,'.mp3') == 1
+        [Y,Fs] = audioread(file_path);
+    else
+        error(strcat('Audio extension not supported: ',ext))
+    end
+    %%Compute spectrum~
     windowSize = 1024;
     overlap = windowSize/2;
     %(x,window,noverlap,nfft,fs)
