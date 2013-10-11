@@ -19,7 +19,7 @@ dat_testing = [];
 % get the testing and and training indexings
 training_idxs = randperm(num_songs,training_percentage)-1;
 testing_idxs = setdiff(0:num_songs-1,training_idxs);
-
+if(training_percentage <= 99)
 fprintf('Creating Spectrograms of genre %s for training set\n',folderName);
 for j=training_idxs
     path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');        
@@ -33,6 +33,17 @@ for j=testing_idxs
     P = get_spec_from_audio(path,prep);
     dat_testing = horzcat(dat_testing, P);
 end
+else %traing with all the data
+    for j=0:num_songs-1
+    path = strcat('data/genres/',folderName ,'/',folderName ,'.',sprintf('%05d',j), '.au');        
+    P = get_spec_from_audio(path,prep);
+    dat_training = horzcat(dat_training, P);
+    end
+
+    
+end
+
+
 
 fprintf('saving spectrogram to file...');
 %write genre data to file

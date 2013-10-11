@@ -12,8 +12,8 @@ addpath lib/ksvdbox13
 %% Configuration parameters
 
 %list of folders to be included into training
-folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
-%folders = {'blues', 'classical', 'country'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+%folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+folders = {'blues', 'classical', 'country'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
 
 
 %feature extraction method: spectrogram or cqt
@@ -28,7 +28,7 @@ target_sparsity = 1;
 
 %Percentage of the data which is used for training. The rest is used for
 %testing
-training_precentage = 90;
+training_precentage = 100;
 
 %size of the dictionary per genre
 dict_size = 50;
@@ -37,7 +37,7 @@ dict_size = 50;
 fprintf('Starting script at: %s\n', datestr(now));
 
 %what preprocessing:
-prep='none'
+prep='norm'
 
 %If we use random vector to initialize the Dictionary
 random = false;
@@ -61,12 +61,12 @@ fprintf('== dictionary learning ==\n');
 
 create_dict_from_gtzan(dict_size, num_iterations,target_sparsity, folders, ex_method,random);
 
-encode_features_using_dictionaries(target_sparsity, folders, ex_method);
+encode_features_using_dictionaries(target_sparsity, folders, ex_method,0);
 
 %% Code word encoding aggregation
 fprintf('\n_________________________________________\n');
 fprintf('== Bag of histograms creation ==\n');
-create_histograms_from_gtzan(folders);
+create_histograms_from_gtzan(folders,0);
 
 %% SVM training
 fprintf('\n_________________________________________\n');
@@ -76,7 +76,7 @@ histograms = [];
 labels = [];
 
 
-[TR,TE,LTR,LTE] = split_into_training_and_testing(folders);
+[TR,TE,LTR,LTE] = split_into_training_and_testing(folders,0);
 
 % normalize the histograms for the support vector machine :)
 %minimums = min(TR', [], 1);
@@ -94,7 +94,9 @@ labels = [];
 %small
 %xvalidation_range = power(2,-1.5:0.5:1.0)
 %big
-xvalidation_range = power(2,1.5:0.3:3.0)
+%xvalidation_range = power(2,1.5:0.3:3.0)
+%bigger
+%xvalidation_range = power(2,3.0:0.3:5.0)
 
 
 % use now the normalized histograms
