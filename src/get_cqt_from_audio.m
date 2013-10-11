@@ -5,15 +5,15 @@ function [ CQT ] = get_cqt_from_audio( file_path )
 fprintf('Processing file %s \n',file_path);
 
 % Read in the sound data
-    Y = []
-    FS = []
-    [~, ~, ext] = fileparts(file_path) 
+    Y = [];
+    FS = [];
+    [~, ~, ext] = fileparts(file_path);
     if strcmp(ext,'.au') == 1
         [Y,Fs,~] = auread(file_path);
     elseif strcmp(ext,'.mp3') == 1
-        [Y,Fs] = audioread(file_path)
+        [Y,Fs] = audioread(file_path);
     else
-        error('Audio extension not supported: ' + ext)
+        error('Audio extension not supported: ' + ext);
     end
  
 

@@ -12,7 +12,7 @@ util_create_directory_structure(savePathroot);
 %create job
 profileName = parallel.defaultClusterProfile();
 cluster = parcluster(profileName);
-job = createJob(cluster)
+job = createJob(cluster);
 
 
 for i=1:num_genres;
@@ -21,7 +21,7 @@ end
 
 fprintf('Starting job to create cqts from gtzan\n');
 %job.Tasks
-submit(job)
-wait(job)
-delete(job)
+submit(job);
+wait(job);
+delete(job);
 fprintf('Job finished.\n');

@@ -7,6 +7,7 @@ if nargin < 3
     prep = 'none';
 end
 
+% create directories if they don't exists
 savePathTraining = './data/spectrograms/training/';
 savePathTesting = './data/spectrograms/testing/';
 

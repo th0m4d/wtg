@@ -40,7 +40,7 @@ fprintf('Starting script at: %s\n', datestr(now));
 prep='none'
 
 %If we use random vector to initialize the Dictionary
-random = 0;
+random = false;
 
 
 %% Old data cleanup
