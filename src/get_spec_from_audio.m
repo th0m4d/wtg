@@ -8,12 +8,13 @@ function [ spec ] = get_spec_from_audio( file_path,prep)
     fprintf('Processing file %s \n',file_path);
     
     [~, ~, ext] = fileparts(file_path); 
-    Y = []
-    Fs = []
+    Y = [];
+    Fs = [];
     if strcmp(ext,'.au') == 1
         [Y,Fs,~] = auread(file_path);
     elseif strcmp(ext,'.mp3') == 1
         [Y,Fs] = audioread(file_path);
+        Y = (Y(:,1)+Y(:,2))/2;
     else
         error(strcat('Audio extension not supported: ',ext))
     end
