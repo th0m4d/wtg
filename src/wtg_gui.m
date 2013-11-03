@@ -77,23 +77,35 @@ global folders;
 folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
 
 %load the dictionary from file system
+global spectrogram_dict_path;
+spectrogram_dict_path = 'data/dictionaries/spectrogram/';
+global cqt_dict_path;
+cqt_dict_path = 'data/dictionaries/cqt/';
+
 global dictionary;
-dictionary = loadDictionary();
+dictionary = loadDictionary(spectrogram_dict_path);
 
 global G;
 G = dictionary' * dictionary;
 
+%load the svm model from file system
 global svmmodel;
-svmmodel = loadSVMModel();
+global spectrogram_model_path;
+spectrogram_model_path = 'data/model/dic50_spec_norm_spar_1.svmmodel.mat';
+%spectrogram_model_path = 'data/model/svmmodel.mat';
+global cqt_model_path;
+cqt_model_path = '';
 
-function dictionary = loadDictionary()
+svmmodel = loadSVMModel(spectrogram_model_path);
+
+function dictionary = loadDictionary(dict_path)
     %genre folders
     global folders;
     num_genres = size(folders,2);
     dictionary = [];
     for i=1:num_genres
         folderName = char(folders(i));
-        path = strcat('data/dictionaries/',folderName,'_data.mat');
+        path = strcat(dict_path,folderName,'_data.mat');
         % Read in the dictionaries
         data = load(path);
         %encoding = data.A;
@@ -101,10 +113,15 @@ function dictionary = loadDictionary()
     end
     dictionary;
     
-function svmmodel = loadSVMModel()
-    path = strcat('data/model/svmmodel.mat');
+function svmmodel = loadSVMModel(path)
     % Read in the svm model
-    svmmodel = load(path);        
+    try
+        svmmodel = load(path);
+    catch exception
+        user_response = modal_dialog('Title','Model error');
+    end
+
+            
 
 % --- Outputs from this function are returned to the command line.
 function varargout = wtg_gui_OutputFcn(hObject, eventdata, handles) 
@@ -177,6 +194,24 @@ function audio_feature_popup_Callback(hObject, eventdata, handles)
 
 % Hints: contents = cellstr(get(hObject,'String')) returns audio_feature_popup contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from audio_feature_popup
+    global spectrogram_model_path;
+    global cqt_model_path;
+    global svmmodel;
+    global spectrogram_dict_path;
+    global cqt_dict_path;
+    global dictionary;
+    global G;
+    feature = getCurrentPopupString(handles.audio_feature_popup);
+    fprintf(feature);
+    if(strcmp(feature, 'Spectrogram') == 1)
+        svmmodel = loadSVMModel(spectrogram_model_path);
+        dictionary = loadDictionary(spectrogram_dict_path);
+        G = dictionary' * dictionary;
+    elseif(strcmp(feature, 'CQT') == 1)
+        svmmodel = loadSVMModel(cqt_model_path);
+        dictionary = loadDictionary(cqt_dict_path);
+        G = dictionary' * dictionary;
+    end
 
 
 % --- Executes during object creation, after setting all properties.
@@ -209,6 +244,9 @@ function classify(handles)
     voting = voteMajority(labels);
     set(handles.genre_text,'string', folders(voting));
     
+    
+function prepareAudio(filePath)
+    
 
 function [features] = getFeatures(filePath, handles)
     audio_feature = getCurrentPopupString(handles.audio_feature_popup);
@@ -238,17 +276,33 @@ function labels = predict(histogram)
     hist_size = size(histogram);
     labels = zeros(hist_size(2),1);
     [svml,svmap,svmd] = boh_svm_predict(svmmodel.svmmodel, histogram',labels);
-    labels = svml
+    probabilities = getLabelProbabilities(svml,svmd);
+    labels = probabilities;
+    
+function probabilities = getLabelProbabilities(svml, svmd)
+    global folders;    
+    probabilities = zeros(size(folders,2),1);
+    for i = 1:size(svml,1)
+        probabilities(svml(i)) = probabilities(svml(i)) + svmd(i,svml(i));
+    end
+    
+%     for i = 1:size(probabilities)
+%         if(probabilities(i) > 0)
+%             probabilities(i) = probabilities(i) / sum(svml == i);
+%         end
+%     end
+    
+    probabilities
     
 function voting = voteMajority(labels)
-    voting = mode(labels)
+    voting = find(labels == max(labels(:)));
 
 function str = getCurrentPopupString(hh)
     %# getCurrentPopupString returns the currently selected string in the popupmenu with handle hh
 
     %# could test input here
     if ~ishandle(hh) || strcmp(get(hh,'Type'),'popupmenu')
-    error('getCurrentPopupString needs a handle to a popupmenu as input')
+    error('getCurrentPopupString needs a handle to a popupmenu as input');
     end
 
     %# get the string - do it the readable way
