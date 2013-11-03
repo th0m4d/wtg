@@ -5,7 +5,7 @@ function create_histograms_from_gtzan(folders,use_testing)
 %computation).
 
 if ~exist('use_testing','var') || isempty(use_testing)
-  use_testing=1;
+  use_testing=false;
 end
 
 

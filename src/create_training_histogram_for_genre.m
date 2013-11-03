@@ -7,7 +7,8 @@ function create_training_histogram_for_genre( folderName )
     path = strcat('data/sparserep/training/',folderName,'_data.mat');
     % Read in the dictionaries
     data = load(path);
-    encoding = data.gamma;
+    %Hack to  unify the frames per song:
+    encoding = data.gamma;%(:,1:129100);
 
     H_tr = get_bag_of_histograms(encoding, 22050, 1024, 5);
     
