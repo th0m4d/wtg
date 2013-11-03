@@ -12,26 +12,26 @@ addpath lib/ksvdbox13
 %% Configuration parameters
 
 %list of folders to be included into training
-%folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
-folders = {'blues', 'classical', 'country'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+%folders = {'blues', 'classical', 'country'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
 
 
 %feature extraction method: spectrogram or cqt
-ex_method = 'spectrogram'
-%ex_method = 'cqt'
+%ex_method = 'spectrogram'
+ex_method = 'cqt'
 
 %numbers of iterations for the generation of the dictionary
 num_iterations = 50;
 
 %target sparcity for the encoding of the dictionary
-target_sparsity = 1;
+target_sparsity = 3;
 
 %Percentage of the data which is used for training. The rest is used for
 %testing
-training_precentage = 100;
+training_precentage = 90;
 
 %size of the dictionary per genre
-dict_size = 50;
+dict_size = 200;
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
@@ -61,12 +61,14 @@ fprintf('== dictionary learning ==\n');
 
 create_dict_from_gtzan(dict_size, num_iterations,target_sparsity, folders, ex_method,random);
 
-encode_features_using_dictionaries(target_sparsity, folders, ex_method,0);
+%%
+
+encode_features_using_dictionaries(target_sparsity, folders, ex_method,true);
 
 %% Code word encoding aggregation
 fprintf('\n_________________________________________\n');
 fprintf('== Bag of histograms creation ==\n');
-create_histograms_from_gtzan(folders,0);
+create_histograms_from_gtzan(folders,true);
 
 %% SVM training
 fprintf('\n_________________________________________\n');
@@ -94,7 +96,7 @@ labels = [];
 %small
 %xvalidation_range = power(2,-1.5:0.5:1.0)
 %big
-%xvalidation_range = power(2,1.5:0.3:3.0)
+xvalidation_range = power(2,1.5:0.3:3.0)
 %bigger
 %xvalidation_range = power(2,3.0:0.3:5.0)
 
