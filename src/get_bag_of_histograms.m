@@ -36,7 +36,7 @@ for i = 0:(nshifts - 1)
     aCol = A(:,(startCols:endCols));
     %sum over the columns of aCol
     colSum = sum(aCol, 2);
-    X = horzcat(X,colSum); 
+   X  = horzcat(X,colSum); 
 end
 
-B = X;
+B = X(:,1:600);

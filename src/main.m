@@ -24,11 +24,7 @@ ex_method = 'cqt'
 num_iterations = 50;
 
 %target sparcity for the encoding of the dictionary
-target_sparsity = 3;
-
-%Percentage of the data which is used for training. The rest is used for
-%testing
-training_precentage = 90;
+target_sparsity = 2;
 
 %size of the dictionary per genre
 dict_size = 200;
@@ -41,6 +37,16 @@ prep='norm'
 
 %If we use random vector to initialize the Dictionary
 random = false;
+
+%Percentage of the data which is used for training. The rest is used for
+%testing
+training_precentage = 100;
+
+%if we want to use only the whole data  as training and evaluation (10-fold 
+% cross validation) if this true this will use the data from the testing 
+% directory and encode it separatly.
+% if you are using 100% data for training then this should be set to false
+use_testing = false;
 
 
 %% Old data cleanup
@@ -61,14 +67,12 @@ fprintf('== dictionary learning ==\n');
 
 create_dict_from_gtzan(dict_size, num_iterations,target_sparsity, folders, ex_method,random);
 
-%%
-
-encode_features_using_dictionaries(target_sparsity, folders, ex_method,true);
+encode_features_using_dictionaries(target_sparsity, folders, ex_method,use_testing);
 
 %% Code word encoding aggregation
 fprintf('\n_________________________________________\n');
 fprintf('== Bag of histograms creation ==\n');
-create_histograms_from_gtzan(folders,true);
+create_histograms_from_gtzan(folders,use_testing);
 
 %% SVM training
 fprintf('\n_________________________________________\n');
@@ -100,11 +104,12 @@ xvalidation_range = power(2,1.5:0.3:3.0)
 %bigger
 %xvalidation_range = power(2,3.0:0.3:5.0)
 
+xvalidation_range = [0.3553]
 
 % use now the normalized histograms
 %svmmodel = boh_svm_train(normTR ,LTR',xvalidation_range,1);
-svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range,1);
-
+%svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range,true);
+%boh_stratified_xvalidation(TR', LTR',0.3553,6,10)
 
 %call like this to train with an specific value
 %C = 55;
@@ -114,15 +119,15 @@ fprintf('\n_________________________________________\n');
 fprintf('== SVM model testingc==\n');
 
 %Make a prediction to test the model
-[svml,svmap,svmd] = boh_svm_predict(svmmodel,TE',LTE');
+%[svml,svmap,svmd] = boh_svm_predict(svmmodel,TE',LTE');
 
 %get the accuracy per clip
-fprintf('Calculating per clip\n');
-[a,b] = calc_predict_clip(LTE',svml,6);
+%fprintf('Calculating per clip\n');
+%[a,b] = calc_predict_clip(LTR',svml,6);
 
-acc_clip = (1 - nnz(a - b)/size(a,2))*100;
-fprintf('Accuracy  per clip %.2f%% \n',acc_clip);
+%acc_clip = (1 - nnz(a - b)/size(a,2))*100;
+%fprintf('Accuracy  per clip %.2f%% \n',acc_clip);
 
 
 %print date and time
-fprintf('Finishing script at: %s\n', datestr(now));
+%fprintf('Finishing script at: %s\n', datestr(now));

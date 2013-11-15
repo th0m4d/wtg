@@ -7,7 +7,7 @@ joint_D = [];
 num_genres = size(folders,2);
 
 if ~exist('use_testing','var') || isempty(use_testing)
-  use_testing=1;
+  use_testing=true;
 end
 
 

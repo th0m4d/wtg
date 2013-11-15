@@ -11,15 +11,19 @@ function  svmmodel  = boh_svm_train( histograms,labels,range,use_multithreading)
 addpath ./lib/fast-additive-svms/libsvm-mat-3.0-1/
 addpath ./lib/fast-additive-svms/
 
-if(size(range,2)  > 1)  % if the range len is bigger than do xvalidation
-    doxvalidation = 1;  % other wise train directly   
-    C = range(1); % use the only c in the range
-end
+%if(size(range,2)  > 1)  % if the range len is bigger than do xvalidation
+%    doxvalidation = true;  % other wise train directly   
+%    C = range(1); % use the only c in the range
+%else
+%    doxvalidation = false;
+%    C = range(1);
+%end
+doxvalidation = true;  % other wise train directly   
 
 
 if(nargin < 4)
     % use multithreading by default
-    use_multithreading = 1;   
+    use_multithreading = true;   
 end
 
 % model = svmtrain(histograms,labels);
@@ -35,13 +39,13 @@ k = 20;
 %x = 
 cval =  range; %power(2,3.8:0.2:6); % power(2,-5:1:15); % exp(x);
 
-if doxvalidation == 1 % crosvalidation
+if doxvalidation % crosvalidation
 
 fprintf('Training model using 10-fold cross validation from C= %d to %d...\n',cval(1),cval(size(cval,2)));
 fprintf('Training with %d training samples \n',size(labels,1));
 
 
-if(use_multithreading == 0)
+if(use_multithreading == false)
     for i = 1:size(cval,2)
          fprintf('Training with %0.5f \n',cval(i));
          newacc =   svmtrain(labels,histograms,sprintf('-t 5 -b 1 -v 10 -c %0.5f',cval(i)));
@@ -71,6 +75,7 @@ else
     acc = 0;
     for i=1:size(cval,2)
        new_acc =  taskoutput{i};
+       fprintf('Partial accuraccy = %.2f%%',new_acc*100);
        if(new_acc > acc)
            acc = new_acc;
            C = cval(i);
