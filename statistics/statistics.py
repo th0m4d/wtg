@@ -175,25 +175,18 @@ def createSparcityPerformancePlot(show):
 
 
 def createDictSizePerformancePlot(show):
-    # sparcity 1
-    dict_sizes_sp_1 = [50, 100, 200, 300, 400]
-    performaces_sp_1 = [75.96, 80.20, 81.69, 84.40, 77.61]
+    # full cross validation performance
+    dict_sizes_sp_1 = [500, 1000, 2000, 3000, 4000]
+    cross_validation_performance = [75.02, 78.05, 82.11, 83.43, 83.23]
 
-    # sparcity 2
-    dict_sizes_sp_2 = [50, 100, 200]
-    performaces_sp_2 = [65.10, 68.88, 74.55]
-
-    # sparcity 3
-    dict_sizes_sp_3 = [50, 100, 200, 300, 400]
-    performaces_sp_3 = [54.8707, 65.1624, 71.0145, 72.812328, 74.2249]
+    # clipwise normalized performance
+    clipwise_performance = [79.53, 81.5, 84.26, 85.1, 85.12]
 
     plt.figure()
     plot1 = plt.plot(
-        dict_sizes_sp_1, performaces_sp_1, 'r', label="Sparcity = 1")
+        dict_sizes_sp_1, cross_validation_performance, 'r', label="Frame level Performance")
     plot2 = plt.plot(
-        dict_sizes_sp_2, performaces_sp_2, 'b', label="Sparcity = 2")
-    plot3 = plt.plot(
-        dict_sizes_sp_3, performaces_sp_3, 'g', label="Sparcity = 3")
+        dict_sizes_sp_1, clipwise_performance, 'b', label="Clip level Performance")
 
     plt.legend(loc=4)
 
