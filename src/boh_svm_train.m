@@ -1,4 +1,4 @@
-function  svmmodel  = boh_svm_train( histograms,labels,range,use_multithreading)
+function  svmmodel  = boh_svm_train( histograms,labels,range,use_multithreading,doxvalidation)
 % boh_svm_train Train a SVM using a bog kernel
 % This implements binary classification so it is a class vs another
 % First add to the path the modified version of libsvm with the
@@ -18,13 +18,22 @@ addpath ./lib/fast-additive-svms/
 %    doxvalidation = false;
 %    C = range(1);
 %end
-doxvalidation = true;  % other wise train directly   
 
 
 if(nargin < 4)
     % use multithreading by default
     use_multithreading = true;   
 end
+
+
+if(nargin < 4)
+    % use multithreading by default
+    use_multithreading = true;   
+    doxvalidation = true;  % other wise train directly   
+end
+
+
+
 
 % model = svmtrain(histograms,labels);
 % default C-SVM model with C = 1 and 10-fold cross validation
@@ -97,7 +106,8 @@ end
 fprintf('Best parameter C=%i with an accuracy of %f\n',C,acc);
 fprintf('Retraining...'); %Cross validation END
 
-else     
+else 
+C = cval(1);    
 fprintf('Training model directly with C=%i..',C);    
 end 
 

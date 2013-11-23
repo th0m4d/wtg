@@ -4,7 +4,7 @@ function [ expected_clip, predicted_clip ] = calc_predict_clip(expected,predicte
 % group size: how texture windows is the clip split into
 
 %make sure they have the same dimension
-num_clips = round(size(predicted,1)/group_size);
+num_clips = floor(size(predicted,1)/group_size);
 predicted = reshape(predicted,group_size,num_clips);
 expected = reshape(expected,group_size,num_clips);
 

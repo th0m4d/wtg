@@ -6,7 +6,7 @@ function mean_accuracy   = boh_stratified_xvalidation(histograms,labels,cval,fra
 
 
 %let's try to create partituon based on songs
-% we know that  a song has 6 "frames"
+% we know that  a song has 6 "histograms"
 
 len = size(labels,1);
 
@@ -89,8 +89,8 @@ end
         accs_clip(i) = (1 - nnz(a - b)/size(a,2));
     
         fprintf('Accuracy per clip = %0.2f%% (%d/%d) \n', accs_clip(i)*100 ,round(accs_clip(i)*size(a,2)),size(a,2));
-        confusion = vertcat(confusion,a(1:100));
-        confusion = vertcat(confusion,b(1:100));
+        confusion = vertcat(confusion,a);
+        confusion = vertcat(confusion,b);
 
        
      

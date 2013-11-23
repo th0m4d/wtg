@@ -30,7 +30,13 @@ for i=1:num_genres
     data = load(path);
     %histogram = data.H;
     
-    training = data.H_tr;
+    %use only 100 based divisible histogram (drop others)
+    num = mod(size(data.H_tr,2),100)*100;
+        
+    training = data.H_tr(:,1:num);
+    
+    
+    
     histograms_training = horzcat(histograms_training, training);
     label_training = ones(1,size(training,2)) * i;
     
@@ -46,7 +52,9 @@ for i=1:num_genres
     data = load(path);
     %histogram = data.H;
     
-    testing = data.H_te;
+    num = mod(size(data.H_te,2),100)*100;
+    
+    testing = data.H_te(:,1:num);
     histograms_testing = horzcat(histograms_testing, testing);
     label_testing = ones(1,size(testing,2)) * i;
     
