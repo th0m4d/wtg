@@ -3,7 +3,7 @@ function [] = util_delete_data()
 %   Detailed explanation goes here
     spectrograms_dir = './data/spectrograms';
 
-    directories = {'./data/cqts', './data/dictionaries', './data/histograms', './data/sparserep'};
+    directories = {spectrograms_dir,'./data/cqts', './data/dictionaries', './data/histograms', './data/sparserep'};
 
     for i = 1:size(directories,2)
         dir = directories{1,i};

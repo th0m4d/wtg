@@ -39,4 +39,6 @@ for i = 0:(nshifts - 1)
    X  = horzcat(X,colSum); 
 end
 
-B = X(:,1:600);
+% use only num_song divisible 
+
+B = X;

@@ -12,6 +12,7 @@ end
 savePath = './data/histograms/';
 util_create_directory_structure(savePath);
 
+
 num_genres = size(folders,2);
   
 for i=1:num_genres

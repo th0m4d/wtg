@@ -13,12 +13,12 @@ addpath lib/ksvdbox13
 
 %list of folders to be included into training
 folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
-%folders = {'blues', 'classical', 'country'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+%folders = {'blues', 'classical'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
 
 
 %feature extraction method: spectrogram or cqt
-%ex_method = 'spectrogram'
-ex_method = 'cqt'
+ex_method = 'spectrogram'
+%ex_method = 'cqt'
 
 %numbers of iterations for the generation of the dictionary
 num_iterations = 50;
@@ -27,26 +27,25 @@ num_iterations = 50;
 target_sparsity = 2;
 
 %size of the dictionary per genre
-dict_size = 200;
+dict_size = 50;
 
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
-
 %what preprocessing:
-prep='norm'
+prep='norm';
 
 %If we use random vector to initialize the Dictionary
 random = false;
 
 %Percentage of the data which is used for training. The rest is used for
 %testing
-training_precentage = 100;
+training_precentage = 90;
 
 %if we want to use only the whole data  as training and evaluation (10-fold 
 % cross validation) if this true this will use the data from the testing 
 % directory and encode it separatly.
 % if you are using 100% data for training then this should be set to false
-use_testing = false;
+use_testing = true;
 
 
 %% Old data cleanup
@@ -75,59 +74,74 @@ fprintf('== Bag of histograms creation ==\n');
 create_histograms_from_gtzan(folders,use_testing);
 
 %% SVM training
+
 fprintf('\n_________________________________________\n');
-fprintf('== SVM training ==\n');
-
-histograms = [];
-labels = [];
+fprintf('== Loading data for SVM ==\n');
 
 
-[TR,TE,LTR,LTE] = split_into_training_and_testing(folders,0);
+[TR,TE,LTR,LTE] = split_into_training_and_testing(folders,use_testing);
 
-% normalize the histograms for the support vector machine :)
-%minimums = min(TR', [], 1);
-%ranges = max(TR', [], 1) - minimums;
-%normTR = (TR' - repmat(minimums, size(TR', 1), 1)) ./ repmat(ranges, size(TR', 1), 1);
-%normTE = (TE' - repmat(minimums, size(TE', 1), 1)) ./ repmat(ranges, size(TE', 1), 1);
+% one value
+xvalidation_range = [0.3553];
 
-
-
-% call like this to perform cross validation
-%[init,increase,finish] = [-5,0.7,3];
-%xvalidation_range = power(2,2.7:0.2:4.0) % 
-%xvalidation_range = power(2,0:0.5:4) %power(2,-3.5:0.5:2.5); 
-%xvalidation_range =   power(2,-3:0.7:2);
 %small
 %xvalidation_range = power(2,-1.5:0.5:1.0)
+
 %big
-xvalidation_range = power(2,1.5:0.3:3.0)
+%xvalidation_range = power(2,1.5:0.3:3.0)
+
 %bigger
 %xvalidation_range = power(2,3.0:0.3:5.0)
 
-xvalidation_range = [0.3553]
 
-% use now the normalized histograms
-%svmmodel = boh_svm_train(normTR ,LTR',xvalidation_range,1);
-%svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range,true);
-%boh_stratified_xvalidation(TR', LTR',0.3553,6,10)
+%%SVM Classification usage:
 
-%call like this to train with an specific value
-%C = 55;
-%svmmodel = boh_svm_train(TR' ,LTR',0,C);
+%% SVM with  Training/Testing set - histogram level
+%use boh_svm_train when training with a split data set (90%-10%)
+%In this case the cross-validation is done internally by LibSVM
+%at histogram leval
+
+fprintf('\n_________________________________________\n');
+fprintf('== SVM training ==\n');
+
+
+svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range,true,true);
 
 fprintf('\n_________________________________________\n');
 fprintf('== SVM model testingc==\n');
 
 %Make a prediction to test the model
-%[svml,svmap,svmd] = boh_svm_predict(svmmodel,TE',LTE');
+[svml,svmap,svmd] = boh_svm_predict(svmmodel,TE',LTE');
+
+
+%% SVM training with full set. Us this function when training with full data
+
+% In this case we only have just one Testing (10-fold cross validation is
+% used to predict model accuraccy).
+
+c_value = 0.3553; % with which value of c test?
+histograms_per_song = 6; % this is feature dependent for song level acc.
+n_fold = 10 ; % how many folds?
+
+% use cross-validation at histogram level to pick the best c
+svmmodel = boh_svm_train(TR' ,LTR',xvalidation_range,true,true);
+
+% now do Xvalidation at clip-leval and store the confusion matrix
+% as the model is chose using the clip-level accuracy then the x-validation
+% had to be reimplemented in matlab directly.
+
+boh_stratified_xvalidation(TR', LTR',c_value,histograms_per_song,n_fold);
+
+svmmodel = boh_svm_train(TR' ,LTR',c_value,true,false);
+
 
 %get the accuracy per clip
-%fprintf('Calculating per clip\n');
-%[a,b] = calc_predict_clip(LTR',svml,6);
+fprintf('Calculating per clip\n');
+[a,b] = calc_predict_clip(LTR',svml,histograms_per_song);
 
-%acc_clip = (1 - nnz(a - b)/size(a,2))*100;
-%fprintf('Accuracy  per clip %.2f%% \n',acc_clip);
+acc_clip = (1 - nnz(a - b)/size(a,2))*100;
+fprintf('Accuracy  per clip %.2f%% \n',acc_clip);
 
 
 %print date and time
-%fprintf('Finishing script at: %s\n', datestr(now));
+fprintf('Finishing script at: %s\n', datestr(now));
