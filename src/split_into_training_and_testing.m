@@ -31,7 +31,8 @@ for i=1:num_genres
     %histogram = data.H;
     
     %use only 100 based divisible histogram (drop others)
-    num = mod(size(data.H_tr,2),100)*100;
+    num = mod(size(data.H_tr,2),10);
+    num = size(data.H_tr,2) -  num;
         
     training = data.H_tr(:,1:num);
     
@@ -52,7 +53,9 @@ for i=1:num_genres
     data = load(path);
     %histogram = data.H;
     
-    num = mod(size(data.H_te,2),100)*100;
+    num = mod(size(data.H_te,2),10);
+    num = size(data.H_te,2) -  num;  
+    
     
     testing = data.H_te(:,1:num);
     histograms_testing = horzcat(histograms_testing, testing);

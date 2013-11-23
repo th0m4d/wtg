@@ -12,8 +12,8 @@ addpath lib/ksvdbox13
 %% Configuration parameters
 
 %list of folders to be included into training
-%folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
-folders = {'blues', 'classical', 'country'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+folders = {'blues', 'classical', 'country', 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
+%folders = {'blues', 'classical'} % 'disco', 'hiphop', 'jazz', 'metal', 'pop', 'reggae', 'rock'};
 
 
 %feature extraction method: spectrogram or cqt
@@ -32,20 +32,20 @@ dict_size = 50;
 %print date and time
 fprintf('Starting script at: %s\n', datestr(now));
 %what preprocessing:
-prep='norm'
+prep='norm';
 
 %If we use random vector to initialize the Dictionary
 random = false;
 
 %Percentage of the data which is used for training. The rest is used for
 %testing
-training_precentage = 100;
+training_precentage = 90;
 
 %if we want to use only the whole data  as training and evaluation (10-fold 
 % cross validation) if this true this will use the data from the testing 
 % directory and encode it separatly.
 % if you are using 100% data for training then this should be set to false
-use_testing = false;
+use_testing = true;
 
 
 %% Old data cleanup
@@ -96,7 +96,7 @@ xvalidation_range = [0.3553];
 
 %%SVM Classification usage:
 
-%% SVM with a training-testing set - histogram level
+%% SVM with  Training/Testing set - histogram level
 %use boh_svm_train when training with a split data set (90%-10%)
 %In this case the cross-validation is done internally by LibSVM
 %at histogram leval
@@ -115,6 +115,7 @@ fprintf('== SVM model testingc==\n');
 
 
 %% SVM training with full set. Us this function when training with full data
+
 % In this case we only have just one Testing (10-fold cross validation is
 % used to predict model accuraccy).
 
